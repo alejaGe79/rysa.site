@@ -1,0 +1,8 @@
+# robots.txt
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /procesar-contacto.php
+Disallow: /legal/
+
+Sitemap: https://rysa.site/sitemap.xml

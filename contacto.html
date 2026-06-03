@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Ofrecemos desarrollo web profesional, branding corporativo y community management para potenciar tu presencia digital.">
+    <meta property="og:title" content="Contacto | Rysa">
+    <meta property="og:description" content="Desarrollo web, branding y community management.">
+     <link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon/favicon-16x16.png">
+    
+    <link rel="manifest" href="/site.webmanifest">
+       
+    <!-- COLOR DE LA BARRA DE DIRECCIONES EN MÓVILES -->
+    <meta name="theme-color" content="#508AF3">
+    <title>Contacto RYSA | Hablemos de tu proyecto digital</title>
+    <link rel="stylesheet" href="css/rysa.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-57J2XV9XSD"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'G-57J2XV9XSD');
+    </script>
+    <!-- METRICOOL TRACKER - Versión optimizada -->
+    <script>function loadScript(a){var b=document.getElementsByTagName("head")[0],c=document.createElement("script");c.type="text/javascript",c.src="https://tracker.metricool.com/resources/be.js",c.onreadystatechange=a,c.onload=a,b.appendChild(c)}loadScript(function(){beTracker.t({hash:"fd58fb7cd31cfcabdfa9a6986d05b48e"})});</script>
+    <!-- FIN METRICOOL -->
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+    <div class="container">
+        <div class="logo">
+                <img src="img/huella.png" alt="RYSA Digitalizate" class="logo-img">
+                <img src="img/slogan.png" alt="RYSA Digitalizate" class="logo-img">
+        </div>
+        
+        <!-- Botón hamburguesa -->
+        <button class="menu-toggle" id="menuToggle" aria-label="Menú de navegación">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        
+        <!-- Navegación -->
+        <nav class="nav" id="mainNav">
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="servicios.html">Servicios</a></li>
+                <li><a href="proyectos.html">Proyectos</a></li>
+                <li><a href="metodologia.html">Metodología</a></li>
+                <li><a href="equipo.html">Equipo</a></li>
+                <li><a href="contacto.html" class="btn-nav">Presupuesto</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+    <!-- HERO CONTACTO -->
+    <section class="hero hero-contacto">
+        <div class="container">
+            <div class="hero-content">
+                <h2>Hablemos de tu proyecto</h2>
+                <p>Contanos tu idea y veamos cómo podemos digitalizarla juntos. Sin compromiso, con transparencia.</p>
+                <div class="hero-contact-info">
+                    <div class="contact-mini-card">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <h4>Respuesta rápida</h4>
+                            <p>Menos de 24 horas hábiles</p>
+                        </div>
+                    </div>
+                    <div class="contact-mini-card">
+                        <i class="fas fa-calendar-check"></i>
+                        <div>
+                            <h4>Consultoría gratuita</h4>
+                            <p>30 minutos para analizar tu proyecto</p>
+                        </div>
+                    </div>
+                    <div class="contact-mini-card">
+                        <i class="fas fa-file-contract"></i>
+                        <div>
+                            <h4>Presupuesto claro</h4>
+                            <p>Sin costos ocultos ni sorpresas</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <section class="contacto-principal">
+        <div class="container">
+            <div class="contacto-grid">
+                <!-- FORMULARIO -->
+                <div class="formulario-contacto">
+                    <div class="form-header">
+                        <h3><i class="fas fa-paper-plane"></i> Enviar consulta</h3>
+                        <p>Completá el formulario y nos pondremos en contacto a la brevedad.</p>
+                    </div>
+                    <form id="contactForm" action="procesar-formulario.php" method="POST" onsubmit="return validateForm()">
+                        <div class="form-group">
+                            <label for="nombre">Nombre completo *</label>
+                            <input type="text" id="nombre" name="nombre" required placeholder="Ej: María González">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" required placeholder="tu@email.com">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="telefono">Teléfono (opcional)</label>
+                            <input type="tel" id="telefono" name="telefono" placeholder="Teléfono al para que te contactemos">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="empresa">Empresa / Proyecto</label>
+                            <input type="text" id="empresa" name="empresa" placeholder="Nombre de tu negocio o proyecto">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="servicio">¿Qué necesitás? *</label>
+                            <div class="servicios-checkbox">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="servicio[]" id="servicio[0]" value="web">
+                                    <span class="checkmark"></span>
+                                    Desarrollo Web
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="servicio[]" id="servicio[1]" value="branding">
+                                    <span class="checkmark"></span>
+                                    Branding
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="servicio[]" id="servicio[2]" value="cm">
+                                    <span class="checkmark"></span>
+                                    Community Management
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="servicio[]" id="servicio[3]" value="mantenimiento">
+                                    <span class="checkmark"></span>
+                                    Mantenimiento
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="servicio[]" id="servicio[4]" value="sistema">
+                                    <span class="checkmark"></span>
+                                    Sistema a medida
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="servicio[]" id="servicio[5]" value="no-se">
+                                    <span class="checkmark"></span>
+                                    No sé, necesito asesoramiento
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="presupuesto">Presupuesto aproximado</label>
+                            <select id="presupuesto" name="presupuesto">
+                                <option value="" selected>Seleccionar rango</option>
+                                <option value="menos-200">Menos de $200.000</option>
+                                <option value="200-400">$200.000 - $400.000</option>
+                                <option value="400-700">$400.000 - $700.000</option>
+                                <option value="700-1m">$700.000 - $1.000.000</option>
+                                <option value="mas-1m">Más de $1.000.000</option>
+                                <option value="no-se">No sé, necesito asesoramiento</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="mensaje">Contanos sobre tu proyecto *</label>
+                            <textarea id="mensaje" name="mensaje" rows="6" required placeholder="¿Cuál es tu objetivo? ¿Tenés algún plazo? ¿Tenés contenido o material inicial?"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="privacidad" required>
+                                <span class="checkmark"></span>
+                                Acepto la <a href="legal/politica-privacidad.html" target="_blank">Política de Privacidad</a> *
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <i class="fas fa-paper-plane"></i> Enviar consulta
+                        </button>
+                        
+                        <p class="form-footer">
+                            <i class="fas fa-shield-alt"></i> Tus datos están seguros. No compartimos información con terceros.
+                        </p>
+                    </form>
+                </div>
+
+                <!-- INFORMACIÓN DE CONTACTO -->
+                <div class="info-contacto">
+                    <!-- Canales directos -->
+                    <div class="canales-contacto">
+                        <h3><i class="fas fa-comments"></i> Canales directos</h3>
+                        
+                        <div class="canal-item">
+                            <div class="canal-icono">
+                                <i class="fab fa-whatsapp"></i>
+                            </div>
+                            <div class="canal-info">
+                                <h4>WhatsApp</h4>
+                                <p>+54 9 221 637-2123</p>
+                                <p class="small">Para consultas rápidas y presupuestos.</p>
+                                <a href="https://wa.me/5492216372123" target="_blank" class="btn btn-small btn-success">
+                                    <i class="fab fa-whatsapp"></i> Escribir por WhatsApp
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="canal-item">
+                            <div class="canal-icono">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="canal-info">
+                                <h4>Email</h4>
+                                <p>info@rysa.site</p>
+                                <p class="small">Para propuestas formales y documentación.</p>
+                                <a href="mailto:info@rysa.site" class="btn btn-small btn-outline">
+                                    <i class="fas fa-envelope"></i> Enviar email
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="canal-item">
+                            <div class="canal-icono">
+                                <i class="fas fa-video"></i>
+                            </div>
+                            <div class="canal-info">
+                                <h4>Videollamada</h4>
+                                <p>Google Meet / Zoom</p>
+                                <p class="small">Para reuniones de diagnóstico y presentaciones.</p>
+                                <a href="contacto.html#agendar" class="btn btn-small btn-outline">
+                                    <i class="fas fa-calendar-alt"></i> Agendar videollamada
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Información útil -->
+                    <div class="info-util">
+                        <h3><i class="fas fa-info-circle"></i> Información útil</h3>
+                        
+                        <div class="info-item">
+                            <h4>🕐 Horarios de contacto</h4>
+                            <p>Lunes a Viernes: 9:00 - 18:00 hs</p>
+                            <p>Sábados: 10:00 - 14:00 hs (consultas)</p>
+                        </div>
+                        
+                        <div class="info-item">
+                            <h4>📍 Ubicación</h4>
+                            <p>100% remoto · Home Office</p>
+                            <p>Atendemos proyectos en todo el Mundo pero en $ Argentinos.</p>
+                        </div>
+                        
+                        <div class="info-item">
+                            <h4>⏱️ Tiempos de respuesta</h4>
+                            <p><strong>WhatsApp:</strong> 1-2 horas hábiles</p>
+                            <p><strong>Email:</strong> Menos de 24 horas hábiles</p>
+                            <p><strong>Presupuestos:</strong> 48 horas hábiles</p>
+                        </div>
+                    </div>
+
+                    <!-- Preguntas frecuentes -->
+                    <div class="faq-contacto">
+                        <h3><i class="fas fa-question-circle"></i> Preguntas frecuentes</h3>
+                        
+                        <div class="faq-item">
+                            <h4>¿Cómo es el proceso después de contactarlos?</h4>
+                            <p>1. Respondemos tu consulta en 24h. 2. Agendamos una videollamada de diagnóstico (30 min gratis). 3. Preparamos propuesta detallada. 4. Si coincides, firmamos contrato y comenzamos.</p>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <h4>¿Trabajan con empresas fuera de Argentina?</h4>
+                            <p>Sí, trabajamos de forma remota con clientes de cualquier país. Los pagos se realizan vía transferencia internacional, PayPal o Wise.</p>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <h4>¿Ofrecen mantenimiento post-lanzamiento?</h4>
+                            <p>Sí, todos nuestros paquetes incluyen al menos 1 mes de soporte. Ofrecemos planes de mantenimiento mensual con actualizaciones, backups y monitoreo.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA FINAL -->
+    <section class="cta-final-contacto">
+        <div class="container">
+            <div class="cta-card">
+                <h3>¿Preferís que te llamemos nosotros?</h3>
+                <p>Dejanos tu número y horario preferido, y nosotros te contactamos.</p>
+                <a href="#formulario" class="btn btn-secondary btn-large">
+                    <i class="fas fa-phone-alt"></i> Solicitar llamada
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="img/logo_negro.png" alt="RYSA">
+                    <p>Cooperativa de Desarrollo Digital. Digitalizamos ideas reales con soluciones humanas y sostenibles.</p>
+                    <p class="tagline">DIGITALIZATE</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Mapa</h4>
+                    <ul>
+                        <li><a href="servicios.html">Servicios</a></li>
+                        <li><a href="proyectos.html">Proyectos</a></li>
+                        <li><a href="metodologia.html">Metodología</a></li>
+                        <li><a href="equipo.html">Equipo</a></li>
+                        <li><a href="contacto.html">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contacto</h4>
+                    <p><i class="fas fa-envelope"></i> info@rysa.site</p>
+                    <p><i class="fas fa-phone"></i> +54 9 221 637-2123</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 100% remoto · Argentina</p>
+                </div>
+                <div class="footer-social">
+                    <h4>Seguinos</h4>
+                    <p><a href="https://www.facebook.com/rysa.site/" target="_blank"><i class="fab fa-facebook"></i> Facebook</a></p>
+                    <p><a href="https://www.instagram.com/rysa.site/" target="_blank"><i class="fab fa-instagram"></i> Instagram</a></p>
+                    <p><a href="https://www.linkedin.com/in/rysa-site/" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a></p>
+                    <p><a href="https://github.com/alejaGe79" target="_blank"><i class="fab fa-github"></i> GitHub</a></p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 RYSA Cooperativa. Todos los derechos reservados. | 
+                   <a href="legal/terminos-condiciones.html">Términos y condiciones</a> · 
+                   <a href="legal/politica-privacidad.html">Política de privacidad</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript para el formulario -->
+    <script>
+         // ===== MENÚ MÓVIL =====
+    document.addEventListener('DOMContentLoaded', function() {
+        const menuToggle = document.getElementById('menuToggle');
+        const nav = document.querySelector('.nav');
+        const body = document.body;
+        
+        // Crear overlay si no existe
+        let overlay = document.querySelector('.nav-overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.className = 'nav-overlay';
+            document.body.appendChild(overlay);
+        }
+        
+        // Abrir/cerrar menú
+        menuToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            nav.classList.toggle('active');
+            menuToggle.classList.toggle('active');
+            overlay.classList.toggle('active');
+            body.classList.toggle('menu-open');
+        });
+        
+        // Cerrar menú al hacer clic en overlay
+        overlay.addEventListener('click', function() {
+            nav.classList.remove('active');
+            menuToggle.classList.remove('active');
+            overlay.classList.remove('active');
+            body.classList.remove('menu-open');
+        });
+        
+        // Cerrar menú al hacer clic en un enlace
+        document.querySelectorAll('.nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                nav.classList.remove('active');
+                menuToggle.classList.remove('active');
+                overlay.classList.remove('active');
+                body.classList.remove('menu-open');
+            });
+        });
+        
+        // Cerrar menú al presionar Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                nav.classList.remove('active');
+                menuToggle.classList.remove('active');
+                overlay.classList.remove('active');
+                body.classList.remove('menu-open');
+            }
+        });
+        
+        // Ajustar altura del nav en móvil
+        function ajustarAlturaNav() {
+            if (window.innerWidth <= 768) {
+                const headerHeight = document.querySelector('.header').offsetHeight;
+                nav.style.top = headerHeight + 'px';
+                nav.style.height = `calc(100vh - ${headerHeight}px)`;
+            } else {
+                nav.style.top = '0';
+                nav.style.height = 'auto';
+            }
+        }
+        
+        // Ejecutar al cargar y al redimensionar
+        ajustarAlturaNav();
+        window.addEventListener('resize', ajustarAlturaNav);
+    });
+    
+
+    
+ 
+
+// Contador de caracteres (mantener)
+const textarea = document.getElementById('mensaje');
+if (textarea) {
+    const charCounter = document.createElement('div');
+    charCounter.className = 'char-counter';
+    charCounter.style.fontSize = '0.8rem';
+    charCounter.style.color = 'var(--gris-oscuro)';
+    charCounter.style.marginTop = '0.5rem';
+    charCounter.style.textAlign = 'right';
+    textarea.parentNode.insertBefore(charCounter, textarea.nextSibling);
+    
+    textarea.addEventListener('input', function() {
+        const length = this.value.length;
+        charCounter.textContent = `${length} / 2000 caracteres`;
+        
+        if (length > 1900) {
+            charCounter.style.color = '#dc3545';
+        } else if (length > 1500) {
+            charCounter.style.color = '#ffc107';
+        } else {
+            charCounter.style.color = 'var(--gris-oscuro)';
+        }
+    });
+}
+</script>
+
+    
+        </script>
+</body>
+</html>
