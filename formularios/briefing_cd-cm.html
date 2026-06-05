@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RYSA - Briefing para Servicios Digitales</title>
+    <style>
+        /* Estilos base coherentes con rysa.site */
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #f9f9f9;
+            --gray: #7f8c8d;
+            --border: #ecf0f1;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px var(--shadow);
+            overflow: hidden;
+            margin-top: 30px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary), #1a252f);
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .header p {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 1.1rem;
+        }
+        
+        /* Indicador de progreso */
+        .progress-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 25px 40px 10px;
+            background-color: var(--light);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .progress-step {
+            text-align: center;
+            flex: 1;
+            position: relative;
+        }
+        
+        .step-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: white;
+            border: 2px solid var(--gray);
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .step-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+            font-weight: 500;
+        }
+        
+        .progress-step.active .step-circle {
+            background-color: var(--secondary);
+            border-color: var(--secondary);
+            color: white;
+        }
+        
+        .progress-step.completed .step-circle {
+            background-color: var(--secondary);
+            border-color: var(--secondary);
+            color: white;
+        }
+        
+        .progress-step.completed .step-circle:after {
+            content: "✓";
+        }
+        
+        /* Contenedor de tarjetas */
+        .cards-container {
+            padding: 30px 40px;
+            min-height: 500px;
+        }
+        
+        /* Estilo de tarjeta */
+        .card {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .card.active {
+            display: block;
+        }
+        
+        .card-title {
+            color: var(--primary);
+            font-size: 1.6rem;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--secondary);
+        }
+        
+        .card-subtitle {
+            color: var(--gray);
+            font-size: 1rem;
+            margin-bottom: 20px;
+            font-weight: normal;
+        }
+        
+        /* Estilos de formulario */
+        .form-group {
+            margin-bottom: 22px;
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--primary);
+            font-size: 1rem;
+        }
+        
+        .required:after {
+            content: " *";
+            color: var(--accent);
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="url"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: border 0.3s, box-shadow 0.3s;
+        }
+        
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        /* Grupos de checkboxes y radios */
+        .checkbox-group,
+        .radio-group {
+            margin: 12px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .checkbox-group label,
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+            cursor: pointer;
+            padding: 8px 0;
+        }
+        
+        .checkbox-group input[type="checkbox"],
+        .radio-group input[type="radio"] {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        /* Servicios como tarjetas seleccionables */
+        .service-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .service-card {
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .service-card:hover {
+            border-color: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+        
+        .service-card.selected {
+            border-color: var(--secondary);
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+        
+        .service-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--secondary);
+        }
+        
+        .service-name {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .service-desc {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        
+        /* Navegación */
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            padding: 25px 40px;
+            border-top: 1px solid var(--border);
+            background-color: var(--light);
+        }
+        
+        .btn {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-prev {
+            background-color: white;
+            color: var(--primary);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-prev:hover {
+            background-color: #f8f9fa;
+            border-color: var(--gray);
+        }
+        
+        .btn-next {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .btn-next:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-submit {
+            background-color: #27ae60;
+            color: white;
+        }
+        
+        .btn-submit:hover {
+            background-color: #219955;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* Mensaje de error/validación */
+        .error-message {
+            color: var(--accent);
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .has-error input,
+        .has-error select,
+        .has-error textarea {
+            border-color: var(--accent);
+        }
+        
+        .has-error .error-message {
+            display: block;
+        }
+        
+        /* Subformularios específicos */
+        .subform {
+            margin-top: 25px;
+            padding: 20px;
+            background-color: #f8fafc;
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary);
+            display: none;
+        }
+        
+        .subform.active {
+            display: block;
+            animation: slideIn 0.4s ease;
+        }
+        
+        .subform-title {
+            color: var(--primary);
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+        
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                margin-top: 10px;
+            }
+            
+            .header, .cards-container, .navigation {
+                padding: 20px;
+            }
+            
+            .progress-container {
+                padding: 20px 20px 10px;
+            }
+            
+            .step-label {
+                font-size: 0.8rem;
+            }
+            
+            .service-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Encabezado -->
+        <div class="header">
+            <h1>RYSA - Briefing Digital</h1>
+            <p>Complete la información para nuestros servicios de Community Manager y Creador de Contenido</p>
+        </div>
+        
+        <!-- Indicador de progreso -->
+        <div class="progress-container">
+            <div class="progress-step active" id="step1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Datos Cliente</div>
+            </div>
+            <div class="progress-step" id="step2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Servicios</div>
+            </div>
+            <div class="progress-step" id="step3">
+                <div class="step-circle">3</div>
+                <div class="step-label">Briefing</div>
+            </div>
+            <div class="progress-step" id="step4">
+                <div class="step-circle">4</div>
+                <div class="step-label">Plazos</div>
+            </div>
+            <div class="progress-step" id="step5">
+                <div class="step-circle">5</div>
+                <div class="step-label">Confirmar</div>
+            </div>
+        </div>
+        
+        <!-- Contenedor de tarjetas -->
+        <form id="rysaForm" action="https://formsubmit.co/info@rysa.site" method="POST">
+            <!-- Campos ocultos para FormSubmit -->
+            <input type="hidden" name="_subject" value="NUEVO BRIEFING - RYSA">
+            <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="_next" value="https://rysa.site/gracias.html">
+            <input type="hidden" name="_captcha" value="false">
+            
+            <div class="cards-container">
+                <!-- Tarjeta 1: Datos del Cliente -->
+                <div class="card active" id="card1">
+                    <h2 class="card-title">Información del Cliente</h2>
+                    <p class="card-subtitle">Complete sus datos de contacto para comenzar</p>
+                    
+                    <div class="form-group">
+                        <label for="nombre" class="required">Nombre completo / Razón Social</label>
+                        <input type="text" id="nombre" name="nombre" required>
+                        <div class="error-message">Por favor ingrese su nombre</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email" class="required">Correo electrónico</label>
+                        <input type="email" id="email" name="email" required>
+                        <div class="error-message">Ingrese un email válido</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="telefono">Teléfono / WhatsApp</label>
+                        <input type="tel" id="telefono" name="telefono">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="empresa">Empresa / Marca</label>
+                        <input type="text" id="empresa" name="empresa">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="rubro">Rubro / Actividad principal</label>
+                        <input type="text" id="rubro" name="rubro" placeholder="Ej: Abogacía, Gastronomía, Retail...">
+                    </div>
+                </div>
+                
+                <!-- Tarjeta 2: Selección de Servicios -->
+                <div class="card" id="card2">
+                    <h2 class="card-title">Selección de Servicios</h2>
+                    <p class="card-subtitle">Seleccione los servicios que necesita (puede elegir varios)</p>
+                    
+                    <div class="service-cards">
+                        <!-- Community Manager -->
+                        <div class="service-card" data-service="community">
+                            <div class="service-icon">👥</div>
+                            <div class="service-name">Community Manager</div>
+                            <div class="service-desc">Gestión de redes sociales, interacción con seguidores y estrategia digital</div>
+                            <input type="checkbox" name="servicios[]" value="community" style="display: none;">
+                        </div>
+                        
+                        <!-- Creador de Contenido -->
+                        <div class="service-card" data-service="contenido">
+                            <div class="service-icon">📱</div>
+                            <div class="service-name">Creador de Contenido</div>
+                            <div class="service-desc">Creación de posts, gráficos, videos y contenido para redes</div>
+                            <input type="checkbox" name="servicios[]" value="contenido" style="display: none;">
+                        </div>
+                        
+                        <!-- Edición de Video -->
+                        <div class="service-card" data-service="video">
+                            <div class="service-icon">🎬</div>
+                            <div class="service-name">Edición de Video</div>
+                            <div class="service-desc">Edición profesional de videos para redes sociales, YouTube, etc.</div>
+                            <input type="checkbox" name="servicios[]" value="video" style="display: none;">
+                        </div>
+                        
+                        <!-- Marketing Digital -->
+                        <div class="service-card" data-service="marketing">
+                            <div class="service-icon">📈</div>
+                            <div class="service-name">Marketing Digital</div>
+                            <div class="service-desc">Campañas publicitarias, estrategias de crecimiento y conversión</div>
+                            <input type="checkbox" name="servicios[]" value="marketing" style="display: none;">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" style="margin-top: 30px;">
+                        <label for="servicio_principal">¿Cuál es el servicio principal que necesita?</label>
+                        <select id="servicio_principal" name="servicio_principal">
+                            <option value="">Seleccione el principal</option>
+                            <option value="community">Community Manager</option>
+                            <option value="contenido">Creador de Contenido</option>
+                            <option value="video">Edición de Video</option>
+                            <option value="marketing">Marketing Digital</option>
+                        </select>
+                        <div class="error-message">Seleccione un servicio principal</div>
+                    </div>
+                </div>
+                
+                <!-- Tarjeta 3: Briefing Específico -->
+                <div class="card" id="card3">
+                    <h2 class="card-title">Briefing del Servicio</h2>
+                    <p class="card-subtitle">Complete los detalles específicos del servicio seleccionado</p>
+                    
+                    <!-- Subformulario para Community Manager -->
+                    <div class="subform" id="subform-community">
+                        <h3 class="subform-title">Community Manager</h3>
+                        
+                        <div class="form-group">
+                            <label>Redes sociales a gestionar:</label>
+                            <div class="checkbox-group">
+                                <label><input type="checkbox" name="redes[]" value="instagram"> Instagram</label>
+                                <label><input type="checkbox" name="redes[]" value="facebook"> Facebook</label>
+                                <label><input type="checkbox" name="redes[]" value="linkedin"> LinkedIn</label>
+                                <label><input type="checkbox" name="redes[]" value="tiktok"> TikTok</label>
+                                <label><input type="checkbox" name="redes[]" value="twitter"> Twitter/X</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="frecuencia_cm">Frecuencia de publicaciones:</label>
+                            <select id="frecuencia_cm" name="frecuencia_cm">
+                                <option value="">Seleccione frecuencia</option>
+                                <option value="diaria">Diaria (1-2 posts al día)</option>
+                                <option value="3-4semana">3-4 veces por semana</option>
+                                <option value="1-2semana">1-2 veces por semana</option>
+                                <option value="personalizada">Personalizada</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="objetivo_cm">Objetivo principal:</label>
+                            <select id="objetivo_cm" name="objetivo_cm">
+                                <option value="">Seleccione objetivo</option>
+                                <option value="engagement">Aumentar engagement</option>
+                                <option value="seguidores">Aumentar seguidores</option>
+                                <option value="ventas">Generar ventas/leads</option>
+                                <option value="marca">Posicionamiento de marca</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="interaccion_cm">Nivel de interacción con seguidores:</label>
+                            <select id="interaccion_cm" name="interaccion_cm">
+                                <option value="">Seleccione nivel</option>
+                                <option value="basica">Básica (responder mensajes directos)</option>
+                                <option value="media">Media (responder comentarios y mensajes)</option>
+                                <option value="alta">Alta (interacción activa, búsqueda de menciones)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="info_adicional_cm">Información adicional (tono de voz, competencia, etc.):</label>
+                            <textarea id="info_adicional_cm" name="info_adicional_cm" placeholder="Describa el tono de voz deseado, marcas competidoras, información relevante..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <!-- Subformulario para Creador de Contenido -->
+                    <div class="subform" id="subform-contenido">
+                        <h3 class="subform-title">Creador de Contenido</h3>
+                        
+                        <div class="form-group">
+                            <label>Tipo de contenido a crear:</label>
+                            <div class="checkbox-group">
+                                <label><input type="checkbox" name="tipo_contenido[]" value="posts"> Posts para redes</label>
+                                <label><input type="checkbox" name="tipo_contenido[]" value="graficos"> Gráficos/infografías</label>
+                                <label><input type="checkbox" name="tipo_contenido[]" value="carousels"> Carrousels</label>
+                                <label><input type="checkbox" name="tipo_contenido[]" value="stories"> Stories/Reels</label>
+                                <label><input type="checkbox" name="tipo_contenido[]" value="blog"> Artículos para blog</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="cantidad_contenido">Cantidad de contenido mensual:</label>
+                            <select id="cantidad_contenido" name="cantidad_contenido">
+                                <option value="">Seleccione cantidad</option>
+                                <option value="5-10">5-10 piezas</option>
+                                <option value="11-20">11-20 piezas</option>
+                                <option value="21-30">21-30 piezas</option>
+                                <option value="30+">Más de 30 piezas</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="estilo_contenido">Estilo visual del contenido:</label>
+                            <select id="estilo_contenido" name="estilo_contenido">
+                                <option value="">Seleccione estilo</option>
+                                <option value="minimalista">Minimalista</option>
+                                <option value="moderno">Moderno</option>
+                                <option value="colorido">Colorido y vibrante</option>
+                                <option value="elegante">Elegante</option>
+                                <option value="corporativo">Corporativo</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>¿Tiene material de referencia?</label>
+                            <div class="radio-group">
+                                <label><input type="radio" name="material_referencia" value="si"> Sí, lo proporcionaré</label>
+                                <label><input type="radio" name="material_referencia" value="no"> No, necesito asesoría</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="temas_contenido">Temas principales para el contenido:</label>
+                            <textarea id="temas_contenido" name="temas_contenido" placeholder="Liste los temas principales sobre los que quiere crear contenido..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <!-- Subformulario para Edición de Video -->
+                    <div class="subform" id="subform-video">
+                        <h3 class="subform-title">Edición de Video</h3>
+                        
+                        <div class="form-group">
+                            <label>Tipo de videos a editar:</label>
+                            <div class="checkbox-group">
+                                <label><input type="checkbox" name="tipo_video[]" value="redes"> Videos para redes sociales</label>
+                                <label><input type="checkbox" name="tipo_video[]" value="youtube"> Videos para YouTube</label>
+                                <label><input type="checkbox" name="tipo_video[]" value="publicitario"> Videos publicitarios</label>
+                                <label><input type="checkbox" name="tipo_video[]" value="corporativo"> Videos corporativos</label>
+                                <label><input type="checkbox" name="tipo_video[]" value="eventos"> Videos de eventos</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="duracion_video">Duración promedio de los videos:</label>
+                            <select id="duracion_video" name="duracion_video">
+                                <option value="">Seleccione duración</option>
+                                <option value="corto">Cortos (15-60 segundos)</option>
+                                <option value="medio">Medios (1-3 minutos)</option>
+                                <option value="largo">Largos (3-10 minutos)</option>
+                                <option value="muy_largo">Muy largos (+10 minutos)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="estilo_video">Estilo de edición:</label>
+                            <select id="estilo_video" name="estilo_video">
+                                <option value="">Seleccione estilo</option>
+                                <option value="dinamico">Dinámico y rápido</option>
+                                <option value="elegante">Elegante y profesional</option>
+                                <option value="creativo">Creativo y vanguardista</option>
+                                <option value="minimalista">Minimalista y limpio</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Elementos a incluir:</label>
+                            <div class="checkbox-group">
+                                <label><input type="checkbox" name="elementos_video[]" value="logo"> Logo/marca de agua</label>
+                                <label><input type="checkbox" name="elementos_video[]" value="subtitulos"> Subtítulos</label>
+                                <label><input type="checkbox" name="elementos_video[]" value="transiciones"> Transiciones especiales</label>
+                                <label><input type="checkbox" name="elementos_video[]" value="graficos"> Gráficos animados</label>
+                                <label><input type="checkbox" name="elementos_video[]" value="musica"> Música de fondo</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="frecuencia_video">Frecuencia de entrega:</label>
+                            <select id="frecuencia_video" name="frecuencia_video">
+                                <option value="">Seleccione frecuencia</option>
+                                <option value="semanal">Semanal (1-2 videos)</option>
+                                <option value="quincenal">Quincenal (2-4 videos al mes)</option>
+                                <option value="mensual">Mensual (1 video)</option>
+                                <option value="esporadica">Esporádica (según necesidad)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Subformulario para Marketing Digital -->
+                    <div class="subform" id="subform-marketing">
+                        <h3 class="subform-title">Marketing Digital</h3>
+                        
+                        <div class="form-group">
+                            <label>Servicios de marketing necesarios:</label>
+                            <div class="checkbox-group">
+                                <label><input type="checkbox" name="servicios_marketing[]" value="publicidad"> Publicidad en redes</label>
+                                <label><input type="checkbox" name="servicios_marketing[]" value="email"> Email marketing</label>
+                                <label><input type="checkbox" name="servicios_marketing[]" value="seo"> SEO</label>
+                                <label><input type="checkbox" name="servicios_marketing[]" value="analitica"> Análisis y reportes</label>
+                                <label><input type="checkbox" name="servicios_marketing[]" value="estrategia"> Estrategia integral</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="presupuesto_marketing">Presupuesto mensual estimado:</label>
+                            <select id="presupuesto_marketing" name="presupuesto_marketing">
+                                <option value="">Seleccione rango</option>
+                                <option value="bajo">$100 - $500 USD</option>
+                                <option value="medio">$500 - $2,000 USD</option>
+                                <option value="alto">$2,000 - $5,000 USD</option>
+                                <option value="personalizado">Personalizado (más de $5,000)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="objetivo_marketing">Objetivo principal:</label>
+                            <select id="objetivo_marketing" name="objetivo_marketing">
+                                <option value="">Seleccione objetivo</option>
+                                <option value="conciencia">Aumentar conciencia de marca</option>
+                                <option value="leads">Generar leads</option>
+                                <option value="ventas">Aumentar ventas</option>
+                                <option value="trafico">Aumentar tráfico al sitio web</option>
+                                <option value="conversiones">Mejorar conversiones</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="publico_marketing">Público objetivo (target):</label>
+                            <textarea id="publico_marketing" name="publico_marketing" placeholder="Describa su público objetivo: edad, intereses, ubicación..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <!-- Mensaje cuando no hay servicio seleccionado -->
+                    <div id="no-service-message" style="text-align: center; padding: 40px 20px; color: var(--gray);">
+                        <p>Por favor, seleccione un servicio principal en el paso anterior para continuar con el briefing específico.</p>
+                    </div>
+                </div>
+                
+                <!-- Tarjeta 4: Plazos y Presupuesto -->
+                <div class="card" id="card4">
+                    <h2 class="card-title">Plazos y Presupuesto</h2>
+                    <p class="card-subtitle">Defina los tiempos y rango de inversión para su proyecto</p>
+                    
+                    <div class="form-group">
+                        <label for="plazo" class="required">¿Cuándo necesita comenzar?</label>
+                        <select id="plazo" name="plazo" required>
+                            <option value="">Seleccione plazo</option>
+                            <option value="urgente">Urgente (en menos de 1 semana)</option>
+                            <option value="inmediato">Inmediato (en 2-4 semanas)</option>
+                            <option value="normal">Normal (en 1-2 meses)</option>
+                            <option value="flexible">Flexible (sin prisa específica)</option>
+                        </select>
+                        <div class="error-message">Seleccione un plazo</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="duracion">Duración estimada del servicio:</label>
+                        <select id="duracion" name="duracion">
+                            <option value="">Seleccione duración</option>
+                            <option value="1mes">1 mes (prueba)</option>
+                            <option value="3meses">3 meses</option>
+                            <option value="6meses">6 meses</option>
+                            <option value="1ano">1 año</option>
+                            <option value="indefinido">Indefinido</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="presupuesto" class="required">Rango de presupuesto:</label>
+                        <select id="presupuesto" name="presupuesto" required>
+                            <option value="">Seleccione presupuesto</option>
+                            <option value="basico">$300 - $800 USD</option>
+                            <option value="medio">$800 - $2,000 USD</option>
+                            <option value="avanzado">$2,000 - $5,000 USD</option>
+                            <option value="premium">Más de $5,000 USD</option>
+                            <option value="consultar">Necesito asesoría personalizada</option>
+                        </select>
+                        <div class="error-message">Seleccione un rango de presupuesto</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="comentarios_adicionales">Comentarios adicionales o requisitos especiales:</label>
+                        <textarea id="comentarios_adicionales" name="comentarios_adicionales" placeholder="Información adicional que debamos conocer..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>¿Cómo nos conoció?</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="referencia" value="google"> Google/Búsqueda</label>
+                            <label><input type="radio" name="referencia" value="redes"> Redes Sociales</label>
+                            <label><input type="radio" name="referencia" value="recomendacion"> Recomendación</label>
+                            <label><input type="radio" name="referencia" value="otro"> Otro</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tarjeta 5: Confirmación -->
+                <div class="card" id="card5">
+                    <h2 class="card-title">Confirmación y Envío</h2>
+                    <p class="card-subtitle">Revise la información antes de enviar su briefing</p>
+                    
+                    <div id="resumen" style="background-color: #f8fafc; padding: 25px; border-radius: 8px; margin-bottom: 30px;">
+                        <h3 style="color: var(--primary); margin-bottom: 15px;">Resumen del Briefing</h3>
+                        <div id="resumen-contenido">
+                            <!-- El resumen se generará automáticamente con JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <label>
+                                <input type="checkbox" id="confirmacion" name="confirmacion" required>
+                                Confirmo que la información proporcionada es correcta y autorizo el contacto por parte de RYSA
+                            </label>
+                        </div>
+                        <div class="error-message">Debe confirmar para enviar el formulario</div>
+                    </div>
+                    
+                    <div class="note" style="font-size: 14px; color: var(--gray); margin-top: 20px; padding: 15px; background-color: #fff9e6; border-radius: 6px; border-left: 4px solid #f1c40f;">
+                        <p><strong>Nota:</strong> Una vez enviado el formulario, nos pondremos en contacto con usted en un plazo máximo de 24 horas hábiles para coordinar los próximos pasos.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Navegación -->
+            <div class="navigation">
+                <button type="button" class="btn btn-prev" id="btnPrev" style="display: none;">
+                    <span>←</span> Anterior
+                </button>
+                
+                <button type="button" class="btn btn-next" id="btnNext">
+                    Siguiente <span>→</span>
+                </button>
+                
+                <button type="submit" class="btn btn-submit" id="btnSubmit" style="display: none;">
+                    Enviar Briefing
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Variables globales
+        let currentStep = 1;
+        const totalSteps = 5;
+        
+        // Inicializar el formulario
+        document.addEventListener('DOMContentLoaded', function() {
+            // Configurar tarjetas de servicio
+            setupServiceCards();
+            
+            // Configurar evento para servicio principal
+            document.getElementById('servicio_principal').addEventListener('change', function() {
+                updateSubform();
+            });
+            
+            // Configurar botones de navegación
+            document.getElementById('btnNext').addEventListener('click', nextStep);
+            document.getElementById('btnPrev').addEventListener('click', prevStep);
+            
+            // Configurar envío del formulario
+            document.getElementById('rysaForm').addEventListener('submit', function(e) {
+                if (!validateStep(currentStep)) {
+                    e.preventDefault();
+                    return;
+                }
+                
+                // Actualizar asunto del email con el nombre del cliente
+                const nombre = document.getElementById('nombre').value;
+                if (nombre) {
+                    document.querySelector('input[name="_subject"]').value = `BRIEFING RYSA - ${nombre}`;
+                }
+                
+                // Mostrar mensaje de éxito (en producción redirigiría a página de gracias)
+                alert('¡Briefing enviado con éxito! Nos pondremos en contacto pronto.');
+            });
+            
+            // Guardar datos en localStorage periódicamente
+            setInterval(saveFormData, 3000);
+            
+            // Cargar datos guardados si existen
+            loadFormData();
+        });
+        
+        // Configurar tarjetas de servicio seleccionables
+        function setupServiceCards() {
+            const serviceCards = document.querySelectorAll('.service-card');
+            
+            serviceCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const checkbox = this.querySelector('input[type="checkbox"]');
+                    const service = this.getAttribute('data-service');
+                    
+                    // Toggle selección
+                    checkbox.checked = !checkbox.checked;
+                    
+                    if (checkbox.checked) {
+                        this.classList.add('selected');
+                    } else {
+                        this.classList.remove('selected');
+                    }
+                    
+                    // Actualizar selección de servicio principal si es el primero seleccionado
+                    const servicioPrincipal = document.getElementById('servicio_principal');
+                    if (checkbox.checked && servicioPrincipal.value === '') {
+                        servicioPrincipal.value = service;
+                        updateSubform();
+                    }
+                });
+            });
+        }
+        
+        // Actualizar subformulario según servicio principal
+        function updateSubform() {
+            const servicioPrincipal = document.getElementById('servicio_principal').value;
+            
+            // Ocultar todos los subformularios
+            document.querySelectorAll('.subform').forEach(subform => {
+                subform.classList.remove('active');
+            });
+            
+            // Mostrar mensaje de no selección
+            document.getElementById('no-service-message').style.display = 'block';
+            
+            if (servicioPrincipal) {
+                document.getElementById('no-service-message').style.display = 'none';
+                document.getElementById(`subform-${servicioPrincipal}`).classList.add('active');
+            }
+        }
+        
+        // Navegar al siguiente paso
+        function nextStep() {
+            if (!validateStep(currentStep)) {
+                return;
+            }
+            
+            // Ocultar tarjeta actual
+            document.getElementById(`card${currentStep}`).classList.remove('active');
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            
+            // Avanzar al siguiente paso
+            currentStep++;
+            
+            // Mostrar tarjeta siguiente
+            document.getElementById(`card${currentStep}`).classList.add('active');
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            
+            // Actualizar progreso
+            for (let i = 1; i < currentStep; i++) {
+                document.getElementById(`step${i}`).classList.add('completed');
+            }
+            
+            // Actualizar botones de navegación
+            updateNavigation();
+            
+            // Si estamos en el paso 5, generar resumen
+            if (currentStep === 5) {
+                generateSummary();
+            }
+        }
+        
+        // Navegar al paso anterior
+        function prevStep() {
+            // Ocultar tarjeta actual
+            document.getElementById(`card${currentStep}`).classList.remove('active');
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            
+            // Retroceder al paso anterior
+            currentStep--;
+            
+            // Mostrar tarjeta anterior
+            document.getElementById(`card${currentStep}`).classList.add('active');
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            
+            // Actualizar progreso (quitar completado del paso actual)
+            for (let i = currentStep + 1; i <= totalSteps; i++) {
+                document.getElementById(`step${i}`).classList.remove('completed');
+            }
+            
+            // Actualizar botones de navegación
+            updateNavigation();
+        }
+        
+        // Actualizar botones de navegación
+        function updateNavigation() {
+            const btnPrev = document.getElementById('btnPrev');
+            const btnNext = document.getElementById('btnNext');
+            const btnSubmit = document.getElementById('btnSubmit');
+            
+            // Mostrar/ocultar botón "Anterior"
+            if (currentStep > 1) {
+                btnPrev.style.display = 'flex';
+            } else {
+                btnPrev.style.display = 'none';
+            }
+            
+            // Mostrar/ocultar botones "Siguiente" y "Enviar"
+            if (currentStep < totalSteps) {
+                btnNext.style.display = 'flex';
+                btnSubmit.style.display = 'none';
+            } else {
+                btnNext.style.display = 'none';
+                btnSubmit.style.display = 'flex';
+            }
+            
+            // Cambiar texto del botón "Siguiente" en el último paso antes del envío
+            if (currentStep === totalSteps - 1) {
+                btnNext.textContent = 'Revisar y Enviar';
+            } else {
+                btnNext.innerHTML = 'Siguiente <span>→</span>';
+            }
+        }
+        
+        // Validar el paso actual
+        function validateStep(step) {
+            let isValid = true;
+            
+            // Remover errores previos
+            document.querySelectorAll('.has-error').forEach(el => {
+                el.classList.remove('has-error');
+            });
+            
+            // Validar según el paso
+            switch(step) {
+                case 1:
+                    // Validar datos del cliente
+                    const nombre = document.getElementById('nombre');
+                    const email = document.getElementById('email');
+                    
+                    if (!nombre.value.trim()) {
+                        nombre.parentElement.classList.add('has-error');
+                        isValid = false;
+                    }
+                    
+                    if (!email.value.trim() || !isValidEmail(email.value)) {
+                        email.parentElement.classList.add('has-error');
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 2:
+                    // Validar selección de servicios
+                    const serviciosSeleccionados = document.querySelectorAll('input[name="servicios[]"]:checked');
+                    const servicioPrincipal = document.getElementById('servicio_principal');
+                    
+                    if (serviciosSeleccionados.length === 0) {
+                        alert('Por favor seleccione al menos un servicio');
+                        isValid = false;
+                    }
+                    
+                    if (!servicioPrincipal.value) {
+                        servicioPrincipal.parentElement.classList.add('has-error');
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 3:
+                    // Validar briefing específico (depende del servicio)
+                    const servicioPrincipalVal = document.getElementById('servicio_principal').value;
+                    if (!servicioPrincipalVal) {
+                        alert('Por favor seleccione un servicio principal en el paso anterior');
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 4:
+                    // Validar plazos y presupuesto
+                    const plazo = document.getElementById('plazo');
+                    const presupuesto = document.getElementById('presupuesto');
+                    
+                    if (!plazo.value) {
+                        plazo.parentElement.classList.add('has-error');
+                        isValid = false;
+                    }
+                    
+                    if (!presupuesto.value) {
+                        presupuesto.parentElement.classList.add('has-error');
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 5:
+                    // Validar confirmación
+                    const confirmacion = document.getElementById('confirmacion');
+                    if (!confirmacion.checked) {
+                        confirmacion.parentElement.parentElement.classList.add('has-error');
+                        isValid = false;
+                    }
+                    break;
+            }
+            
+            return isValid;
+        }
+        
+        // Validar formato de email
+        function isValidEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+        
+        // Generar resumen para el paso 5
+        function generateSummary() {
+            const resumen = document.getElementById('resumen-contenido');
+            let html = '';
+            
+            // Datos del cliente
+            html += `<p><strong>Cliente:</strong> ${document.getElementById('nombre').value}</p>`;
+            html += `<p><strong>Email:</strong> ${document.getElementById('email').value}</p>`;
+            html += `<p><strong>Teléfono:</strong> ${document.getElementById('telefono').value || 'No proporcionado'}</p>`;
+            html += `<p><strong>Empresa:</strong> ${document.getElementById('empresa').value || 'No proporcionado'}</p>`;
+            html += `<p><strong>Rubro:</strong> ${document.getElementById('rubro').value || 'No proporcionado'}</p>`;
+            html += '<hr style="margin: 15px 0; border-color: #eee;">';
+            
+            // Servicios seleccionados
+            const servicios = [];
+            document.querySelectorAll('input[name="servicios[]"]:checked').forEach(checkbox => {
+                const service = checkbox.value;
+                let serviceName = '';
+                
+                switch(service) {
+                    case 'community': serviceName = 'Community Manager'; break;
+                    case 'contenido': serviceName = 'Creador de Contenido'; break;
+                    case 'video': serviceName = 'Edición de Video'; break;
+                    case 'marketing': serviceName = 'Marketing Digital'; break;
+                }
+                
+                servicios.push(serviceName);
+            });
+            
+            html += `<p><strong>Servicios seleccionados:</strong> ${servicios.join(', ')}</p>`;
+            
+            const servicioPrincipal = document.getElementById('servicio_principal').value;
+            let servicioPrincipalName = '';
+            
+            switch(servicioPrincipal) {
+                case 'community': servicioPrincipalName = 'Community Manager'; break;
+                case 'contenido': servicioPrincipalName = 'Creador de Contenido'; break;
+                case 'video': servicioPrincipalName = 'Edición de Video'; break;
+                case 'marketing': servicioPrincipalName = 'Marketing Digital'; break;
+            }
+            
+            html += `<p><strong>Servicio principal:</strong> ${servicioPrincipalName}</p>`;
+            html += '<hr style="margin: 15px 0; border-color: #eee;">';
+            
+            // Plazos y presupuesto
+            html += `<p><strong>Plazo para comenzar:</strong> ${document.getElementById('plazo').options[document.getElementById('plazo').selectedIndex].text}</p>`;
+            html += `<p><strong>Duración estimada:</strong> ${document.getElementById('duracion').value ? document.getElementById('duracion').options[document.getElementById('duracion').selectedIndex].text : 'No especificada'}</p>`;
+            html += `<p><strong>Rango de presupuesto:</strong> ${document.getElementById('presupuesto').options[document.getElementById('presupuesto').selectedIndex].text}</p>`;
+            
+            resumen.innerHTML = html;
+        }
+        
+        // Guardar datos del formulario en localStorage
+        function saveFormData() {
+            const formData = {};
+            
+            // Guardar todos los campos del formulario
+            const formElements = document.getElementById('rysaForm').elements;
+            
+            for (let element of formElements) {
+                if (element.name && element.type !== 'button' && element.type !== 'submit') {
+                    if (element.type === 'checkbox' || element.type === 'radio') {
+                        if (element.checked) {
+                            if (!formData[element.name]) {
+                                formData[element.name] = [];
+                            }
+                            if (Array.isArray(formData[element.name])) {
+                                formData[element.name].push(element.value);
+                            }
+                        }
+                    } else {
+                        formData[element.name] = element.value;
+                    }
+                }
+            }
+            
+            // Guardar también el paso actual
+            formData.currentStep = currentStep;
+            
+            localStorage.setItem('rysaFormData', JSON.stringify(formData));
+        }
+        
+        // Cargar datos guardados del localStorage
+        function loadFormData() {
+            const savedData = localStorage.getItem('rysaFormData');
+            
+            if (savedData) {
+                const formData = JSON.parse(savedData);
+                
+                // Restaurar el paso actual si existe
+                if (formData.currentStep && formData.currentStep > 1) {
+                    const confirmLoad = confirm('Tiene un formulario incompleto guardado. ¿Desea continuar desde donde dejó?');
+                    
+                    if (confirmLoad) {
+                        // Navegar directamente al paso guardado
+                        while (currentStep < formData.currentStep) {
+                            nextStep();
+                        }
+                    } else {
+                        // Limpiar datos guardados
+                        localStorage.removeItem('rysaFormData');
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

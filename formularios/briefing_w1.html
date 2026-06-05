@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RYSA - Briefing Landing Page Express</title>
+    <style>
+        /* Estilos base coherentes con rysa.site */
+        :root {
+            --primary: #2c3e50;
+            --secondary: #27ae60;
+            --accent: #e74c3c;
+            --light: #f9f9f9;
+            --gray: #7f8c8d;
+            --border: #ecf0f1;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px var(--shadow);
+            overflow: hidden;
+            margin-top: 30px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #219955, #27ae60);
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .header p {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 1.1rem;
+        }
+        
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        /* Indicador de progreso */
+        .progress-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 25px 40px 10px;
+            background-color: var(--light);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .progress-step {
+            text-align: center;
+            flex: 1;
+            position: relative;
+        }
+        
+        .step-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: white;
+            border: 2px solid var(--gray);
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .step-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+            font-weight: 500;
+        }
+        
+        .progress-step.active .step-circle {
+            background-color: var(--secondary);
+            border-color: var(--secondary);
+            color: white;
+        }
+        
+        .progress-step.completed .step-circle {
+            background-color: var(--secondary);
+            border-color: var(--secondary);
+            color: white;
+        }
+        
+        .progress-step.completed .step-circle:after {
+            content: "✓";
+        }
+        
+        /* Contenedor de tarjetas */
+        .cards-container {
+            padding: 30px 40px;
+            min-height: 500px;
+        }
+        
+        /* Estilo de tarjeta */
+        .card {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .card.active {
+            display: block;
+        }
+        
+        .card-title {
+            color: var(--primary);
+            font-size: 1.6rem;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--secondary);
+        }
+        
+        .card-subtitle {
+            color: var(--gray);
+            font-size: 1rem;
+            margin-bottom: 20px;
+            font-weight: normal;
+        }
+        
+        /* Estilos de formulario */
+        .form-group {
+            margin-bottom: 22px;
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--primary);
+            font-size: 1rem;
+        }
+        
+        .required:after {
+            content: " *";
+            color: var(--accent);
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="url"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: border 0.3s, box-shadow 0.3s;
+        }
+        
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 2px rgba(39, 174, 96, 0.2);
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        /* Grupos de checkboxes y radios */
+        .checkbox-group,
+        .radio-group {
+            margin: 12px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .checkbox-group label,
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+            cursor: pointer;
+            padding: 8px 0;
+        }
+        
+        .checkbox-group input[type="checkbox"],
+        .radio-group input[type="radio"] {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        /* Navegación */
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            padding: 25px 40px;
+            border-top: 1px solid var(--border);
+            background-color: var(--light);
+        }
+        
+        .btn {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-prev {
+            background-color: white;
+            color: var(--primary);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-prev:hover {
+            background-color: #f8f9fa;
+            border-color: var(--gray);
+        }
+        
+        .btn-next {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .btn-next:hover {
+            background-color: #219955;
+        }
+        
+        .btn-submit {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .btn-submit:hover {
+            background-color: #219955;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* Mensaje de error/validación */
+        .error-message {
+            color: var(--accent);
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .has-error input,
+        .has-error select,
+        .has-error textarea {
+            border-color: var(--accent);
+        }
+        
+        .has-error .error-message {
+            display: block;
+        }
+        
+        /* Paquetes de servicio */
+        .package-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .package-card {
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .package-card:hover {
+            border-color: var(--secondary);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .package-card.selected {
+            border-color: var(--secondary);
+            background-color: rgba(39, 174, 96, 0.05);
+        }
+        
+        .package-name {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .package-price {
+            font-size: 1.5rem;
+            color: var(--secondary);
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .package-features {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+        
+        .package-features li {
+            padding: 5px 0;
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+        }
+        
+        .package-features li:before {
+            content: "✓";
+            color: var(--secondary);
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        /* Secciones de landing page */
+        .section-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .section-option {
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .section-option:hover {
+            border-color: var(--secondary);
+            transform: translateY(-3px);
+        }
+        
+        .section-option.selected {
+            border-color: var(--secondary);
+            background-color: rgba(39, 174, 96, 0.05);
+        }
+        
+        .section-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .section-name {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        /* Diseño de color */
+        .color-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .color-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+        
+        .color-option.selected {
+            border: 3px solid var(--secondary);
+        }
+        
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                margin-top: 10px;
+            }
+            
+            .header, .cards-container, .navigation {
+                padding: 20px;
+            }
+            
+            .progress-container {
+                padding: 20px 20px 10px;
+            }
+            
+            .step-label {
+                font-size: 0.8rem;
+            }
+            
+            .package-cards,
+            .section-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Encabezado -->
+        <div class="header">
+            <div class="service-icon">🚀</div>
+            <h1>Landing Page Express - RYSA</h1>
+            <p>Complete el briefing para su Landing Page de alta conversión</p>
+        </div>
+        
+        <!-- Indicador de progreso -->
+        <div class="progress-container">
+            <div class="progress-step active" id="step1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Datos Cliente</div>
+            </div>
+            <div class="progress-step" id="step2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Información LP</div>
+            </div>
+            <div class="progress-step" id="step3">
+                <div class="step-circle">3</div>
+                <div class="step-label">Secciones LP</div>
+            </div>
+            <div class="progress-step" id="step4">
+                <div class="step-circle">4</div>
+                <div class="step-label">Diseño y Estilo</div>
+            </div>
+            <div class="progress-step" id="step5">
+                <div class="step-circle">5</div>
+                <div class="step-label">Confirmar</div>
+            </div>
+        </div>
+        
+        <!-- Contenedor de tarjetas -->
+        <form id="rysaForm" action="https://formsubmit.co/info@rysa.site" method="POST">
+            <!-- Campos ocultos para FormSubmit -->
+            <input type="hidden" name="_subject" value="LANDING PAGE EXPRESS - Nuevo Briefing">
+            <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="_next" value="https://rysa.site/gracias.html">
+            <input type="hidden" name="_captcha" value="false">
+            
+            <!-- Campos para la base de datos -->
+            <input type="hidden" name="tipo_formulario" value="landing_page_express">
+            <input type="hidden" name="fecha_envio" id="fecha_envio">
+            <input type="hidden" name="ip_cliente" id="ip_cliente">
+            <input type="hidden" name="user_agent" id="user_agent">
+            <input type="hidden" name="datos_completos" id="datos_completos">
+            
+            <div class="cards-container">
+                <!-- Tarjeta 1: Datos del Cliente -->
+                <div class="card active" id="card1">
+                    <h2 class="card-title">Información del Cliente</h2>
+                    <p class="card-subtitle">Complete sus datos de contacto para comenzar</p>
+                    
+                    <div class="form-group">
+                        <label for="nombre" class="required">Nombre completo / Razón Social</label>
+                        <input type="text" id="nombre" name="nombre" required>
+                        <div class="error-message">Por favor ingrese su nombre</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email" class="required">Correo electrónico</label>
+                        <input type="email" id="email" name="email" required>
+                        <div class="error-message">Ingrese un email válido</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="telefono">Teléfono / WhatsApp</label>
+                        <input type="tel" id="telefono" name="telefono">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="empresa">Empresa / Marca</label>
+                        <input type="text" id="empresa" name="empresa">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="rubro" class="required">Rubro / Actividad principal</label>
+                        <input type="text" id="rubro" name="rubro" placeholder="Ej: Abogacía, Gastronomía, Retail..." required>
+                        <div class="error-message">Por favor ingrese el rubro de su empresa</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="sitio_web_actual">Sitio web actual (si tiene)</label>
+                        <input type="url" id="sitio_web_actual" name="sitio_web_actual" placeholder="https://">
+                    </div>
+                </div>
+                
+                <!-- Tarjeta 2: Información de la Landing Page -->
+                <div class="card" id="card2">
+                    <h2 class="card-title">Información de la Landing Page</h2>
+                    <p class="card-subtitle">Defina el propósito y objetivos de su landing page</p>
+                    
+                    <div class="package-cards">
+                        <!-- Landing Page Express -->
+                        <div class="package-card selected" data-package="express">
+                            <div class="package-name">Landing Page Express</div>
+                            <div class="package-price">Consultar</div>
+                            <ul class="package-features">
+                                <li>Diseño moderno y responsive</li>
+                                <li>Hasta 5 secciones</li>
+                                <li>Formulario de contacto</li>
+                                <li>Optimización SEO básica</li>
+                                <li>Integración redes sociales</li>
+                                <li>Entrega en 7-10 días</li>
+                                <li>Soporte por 30 días</li>
+                            </ul>
+                            <input type="hidden" name="paquete_web" value="landing_page_express" checked>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" style="margin-top: 30px;">
+                        <label for="objetivo_lp" class="required">Objetivo principal de la landing page:</label>
+                        <select id="objetivo_lp" name="objetivo_lp" required>
+                            <option value="">Seleccione objetivo</option>
+                            <option value="ventas">Generar ventas</option>
+                            <option value="leads">Captar leads/clientes potenciales</option>
+                            <option value="descargas">Promover descargas (e-book, app)</option>
+                            <option value="registros">Obtener registros/newsletter</option>
+                            <option value="eventos">Promover evento/webinar</option>
+                            <option value="lanzamiento">Lanzamiento de producto/servicio</option>
+                        </select>
+                        <div class="error-message">Seleccione un objetivo principal</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="producto_servicio" class="required">Producto o servicio a promocionar:</label>
+                        <textarea id="producto_servicio" name="producto_servicio" placeholder="Describa el producto o servicio que quiere promocionar en la landing page..." required></textarea>
+                        <div class="error-message">Describa el producto o servicio</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="publico_objetivo" class="required">Público objetivo (target):</label>
+                        <textarea id="publico_objetivo" name="publico_objetivo" placeholder="Describa su público objetivo: edad, intereses, profesión, ubicación, necesidades..." required></textarea>
+                        <div class="error-message">Describa el público objetivo</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="propuesta_valor">Propuesta de valor única (USP):</label>
+                        <textarea id="propuesta_valor" name="propuesta_valor" placeholder="¿Qué hace único a su producto/servicio? ¿Por qué deberían elegirlo a usted?"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="llamado_accion" class="required">Llamado a la acción principal:</label>
+                        <input type="text" id="llamado_accion" name="llamado_accion" placeholder="Ej: ¡Comprar ahora!, ¡Descargar gratis!, ¡Agendar consulta!" required>
+                        <div class="error-message">Defina el llamado a la acción principal</div>
+                    </div>
+                </div>
+                
+                <!-- Tarjeta 3: Secciones de la Landing Page -->
+                <div class="card" id="card3">
+                    <h2 class="card-title">Secciones de la Landing Page</h2>
+                    <p class="card-subtitle">Seleccione las secciones que desea incluir (máximo 5)</p>
+                    
+                    <div class="section-options">
+                        <div class="section-option selected" data-section="hero">
+                            <div class="section-icon">👑</div>
+                            <div class="section-name">Hero / Portada</div>
+                            <input type="checkbox" name="secciones[]" value="hero" style="display: none;" checked>
+                        </div>
+                        
+                        <div class="section-option" data-section="beneficios">
+                            <div class="section-icon">✅</div>
+                            <div class="section-name">Beneficios</div>
+                            <input type="checkbox" name="secciones[]" value="beneficios" style="display: none;">
+                        </div>
+                        
+                        <div class="section-option" data-section="caracteristicas">
+                            <div class="section-icon">⚡</div>
+                            <div class="section-name">Características</div>
+                            <input type="checkbox" name="secciones[]" value="caracteristicas" style="display: none;">
+                        </div>
+                        
+                        <div class="section-option" data-section="testimonios">
+                            <div class="section-icon">💬</div>
+                            <div class="section-name">Testimonios</div>
+                            <input type="checkbox" name="secciones[]" value="testimonios" style="display: none;">
+                        </div>
+                        
+                        <div class="section-option" data-section="precios">
+                            <div class="section-icon">💰</div>
+                            <div class="section-name">Precios/Planes</div>
+                            <input type="checkbox" name="secciones[]" value="precios" style="display: none;">
+                        </div>
+                        
+                        <div class="section-option" data-section="faq">
+                            <div class="section-icon">❓</div>
+                            <div class="section-name">FAQ</div>
+                            <input type="checkbox" name="secciones[]" value="faq" style="display: none;">
+                        </div>
+                        
+                        <div class="section-option selected" data-section="cta">
+                            <div class="section-icon">🎯</div>
+                            <div class="section-name">Llamado a la acción</div>
+                            <input type="checkbox" name="secciones[]" value="cta" style="display: none;" checked>
+                        </div>
+                        
+                        <div class="section-option selected" data-section="contacto">
+                            <div class="section-icon">📞</div>
+                            <div class="section-name">Formulario contacto</div>
+                            <input type="checkbox" name="secciones[]" value="contacto" style="display: none;" checked>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" style="margin-top: 30px;">
+                        <label for="contenido_especifico">Contenido específico para incluir:</label>
+                        <textarea id="contenido_especifico" name="contenido_especifico" placeholder="Texto específico, eslogan, frases clave, testimonios reales, datos importantes..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="referencias_lp">Referencias o ejemplos de landing pages:</label>
+                        <textarea id="referencias_lp" name="referencias_lp" placeholder="URLs de landing pages que le gusten, estilos que prefiera..."></textarea>
+                    </div>
+                </div>
+                
+                <!-- Tarjeta 4: Diseño y Estilo -->
+                <div class="card" id="card4">
+                    <h2 class="card-title">Diseño y Estilo</h2>
+                    <p class="card-subtitle">Defina la apariencia visual de su landing page</p>
+                    
+                    <div class="form-group">
+                        <label for="estilo_diseno" class="required">Estilo de diseño preferido:</label>
+                        <select id="estilo_diseno" name="estilo_diseno" required>
+                            <option value="">Seleccione estilo</option>
+                            <option value="moderno">Moderno y minimalista</option>
+                            <option value="corporativo">Corporativo/profesional</option>
+                            <option value="creativo">Creativo/innovador</option>
+                            <option value="elegante">Elegante y sofisticado</option>
+                            <option value="colorido">Colorido y vibrante</option>
+                            <option value="sobrio">Sobrio y serio</option>
+                        </select>
+                        <div class="error-message">Seleccione un estilo de diseño</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Paleta de colores preferida:</label>
+                        <div class="color-options">
+                            <div class="color-option" style="background-color: #2c3e50;" data-color="#2c3e50"></div>
+                            <div class="color-option" style="background-color: #3498db;" data-color="#3498db"></div>
+                            <div class="color-option" style="background-color: #27ae60;" data-color="#27ae60"></div>
+                            <div class="color-option" style="background-color: #e74c3c;" data-color="#e74c3c"></div>
+                            <div class="color-option" style="background-color: #9b59b6;" data-color="#9b59b6"></div>
+                            <div class="color-option" style="background-color: #f39c12;" data-color="#f39c12"></div>
+                            <div class="color-option" style="background-color: #1abc9c;" data-color="#1abc9c"></div>
+                            <div class="color-option" style="background-color: #34495e;" data-color="#34495e"></div>
+                        </div>
+                        <input type="hidden" id="color_principal" name="color_principal">
+                        <p class="note" style="margin-top: 10px; font-size: 14px; color: var(--gray);">Seleccione un color principal. Si tiene colores específicos de marca, indíquelos abajo.</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="colores_especificos">Colores específicos de su marca (si aplica):</label>
+                        <input type="text" id="colores_especificos" name="colores_especificos" placeholder="Ej: Azul #3498db, Blanco #ffffff, Gris #7f8c8d">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>¿Tiene identidad visual (logo, tipografía)?</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="identidad_visual" value="completa" required> Sí, completa</label>
+                            <label><input type="radio" name="identidad_visual" value="parcial"> Sí, parcial</label>
+                            <label><input type="radio" name="identidad_visual" value="ninguna"> No, necesito ayuda</label>
+                        </div>
+                        <div class="error-message" id="identidad-error" style="display: none;">Seleccione una opción</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="material_proporcionar">Material que puede proporcionar:</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" name="material_web[]" value="logo"> Logo</label>
+                            <label><input type="checkbox" name="material_web[]" value="imagenes"> Imágenes/fotos</label>
+                            <label><input type="checkbox" name="material_web[]" value="textos"> Textos/contenido</label>
+                            <label><input type="checkbox" name="material_web[]" value="videos"> Videos</label>
+                            <label><input type="checkbox" name="material_web[]" value="ninguno"> Ninguno, necesito todo</label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="dominio_lp" class="required">¿Tiene dominio para la landing page?</label>
+                        <select id="dominio_lp" name="dominio_lp" required>
+                            <option value="">Seleccione opción</option>
+                            <option value="si"> Sí, ya tengo dominio</option>
+                            <option value="no"> No, necesito ayuda para registrar uno</option>
+                            <option value="subdominio"> Prefiero subdominio temporal</option>
+                        </select>
+                        <div class="error-message">Seleccione una opción</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="hosting_lp" class="required">¿Necesita hosting para la landing page?</label>
+                        <select id="hosting_lp" name="hosting_lp" required>
+                            <option value="">Seleccione opción</option>
+                            <option value="si"> Sí, necesito hosting</option>
+                            <option value="no"> No, ya tengo hosting</option>
+                            <option value="no_se"> No sé, necesito asesoría</option>
+                        </select>
+                        <div class="error-message">Seleccione una opción</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="plazo_lp" class="required">Plazo deseado para la entrega:</label>
+                        <select id="plazo_lp" name="plazo_lp" required>
+                            <option value="">Seleccione plazo</option>
+                            <option value="urgente">Urgente (5-7 días)</option>
+                            <option value="normal">Normal (7-10 días)</option>
+                            <option value="flexible">Flexible (2-3 semanas)</option>
+                        </select>
+                        <div class="error-message">Seleccione un plazo</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="presupuesto_lp" class="required">Rango de presupuesto estimado:</label>
+                        <select id="presupuesto_lp" name="presupuesto_lp" required>
+                            <option value="">Seleccione rango</option>
+                            <option value="menos_100">Menos de $100.000</option>
+                            <option value="100_200">$100.000 - $200.000</option>
+                            <option value="200_500">$200.000 - $500.000</option>
+                            <option value="500_1000">$500.000 - $1.000.000</option>
+                            <option value="mas_1000">Más de $1.000.000</option>
+                            <option value="consultar">Necesito asesoría</option>
+                        </select>
+                        <div class="error-message">Seleccione un rango de presupuesto</div>
+                    </div>
+                </div>
+                
+                <!-- Tarjeta 5: Confirmación -->
+                <div class="card" id="card5">
+                    <h2 class="card-title">Confirmación y Envío</h2>
+                    <p class="card-subtitle">Revise la información antes de enviar su briefing</p>
+                    
+                    <div id="resumen" style="background-color: #f8fafc; padding: 25px; border-radius: 8px; margin-bottom: 30px;">
+                        <h3 style="color: var(--primary); margin-bottom: 15px;">Resumen del Briefing - Landing Page Express</h3>
+                        <div id="resumen-contenido">
+                            <!-- El resumen se generará automáticamente con JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <label>
+                                <input type="checkbox" id="confirmacion" name="confirmacion" required>
+                                Confirmo que la información proporcionada es correcta y autorizo el contacto por parte de RYSA para coordinar el desarrollo de mi Landing Page Express.
+                            </label>
+                        </div>
+                        <div class="error-message">Debe confirmar para enviar el formulario</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="comentarios_finales">Comentarios finales o preguntas:</label>
+                        <textarea id="comentarios_finales" name="comentarios_finales" placeholder="¿Algo más que debamos saber sobre su proyecto?"></textarea>
+                    </div>
+                    
+                    <div class="note" style="font-size: 14px; color: var(--gray); margin-top: 20px; padding: 15px; background-color: #fff9e6; border-radius: 6px; border-left: 4px solid #f1c40f;">
+                        <p><strong>Nota sobre el envío de emails:</strong> Si no recibe el email de confirmación, por favor revise su carpeta de spam o contáctenos directamente a info@rysa.site</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Navegación -->
+            <div class="navigation">
+                <button type="button" class="btn btn-prev" id="btnPrev" style="display: none;">
+                    <span>←</span> Anterior
+                </button>
+                
+                <button type="button" class="btn btn-next" id="btnNext">
+                    Siguiente <span>→</span>
+                </button>
+                
+                <button type="submit" class="btn btn-submit" id="btnSubmit" style="display: none;">
+                    Enviar Briefing LP
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Variables globales
+        let currentStep = 1;
+        const totalSteps = 5;
+        
+        // Inicializar el formulario
+        document.addEventListener('DOMContentLoaded', function() {
+            // Configurar opciones de secciones
+            setupSectionOptions();
+            
+            // Configurar opciones de color
+            setupColorOptions();
+            
+            // Configurar botones de navegación
+            document.getElementById('btnNext').addEventListener('click', nextStep);
+            document.getElementById('btnPrev').addEventListener('click', prevStep);
+            
+            // Configurar envío del formulario
+            document.getElementById('rysaForm').addEventListener('submit', function(e) {
+                if (!validateStep(currentStep)) {
+                    e.preventDefault();
+                    return;
+                }
+                
+                // Preparar datos para la base de datos
+                prepareDataForDatabase();
+                
+                // Actualizar asunto del email con el nombre del cliente
+                const nombre = document.getElementById('nombre').value;
+                if (nombre) {
+                    document.querySelector('input[name="_subject"]').value = `LANDING PAGE EXPRESS - ${nombre}`;
+                }
+            });
+            
+            // Guardar datos en localStorage periódicamente
+            setInterval(saveFormData, 3000);
+            
+            // Cargar datos guardados si existen
+            loadFormData();
+            
+            // Configurar color por defecto
+            document.querySelector('.color-option[data-color="#27ae60"]').click();
+        });
+        
+        // Configurar opciones de secciones seleccionables
+        function setupSectionOptions() {
+            const sectionOptions = document.querySelectorAll('.section-option');
+            
+            sectionOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Contar secciones seleccionadas
+                    const selectedSections = document.querySelectorAll('.section-option.selected');
+                    
+                    // Si ya hay 5 seleccionadas y esta no está seleccionada, no permitir seleccionar más
+                    if (selectedSections.length >= 5 && !this.classList.contains('selected')) {
+                        alert('Máximo 5 secciones permitidas para la Landing Page Express');
+                        return;
+                    }
+                    
+                    // Toggle selección
+                    this.classList.toggle('selected');
+                    
+                    // Marcar/desmarcar el checkbox correspondiente
+                    const checkbox = this.querySelector('input[type="checkbox"]');
+                    checkbox.checked = !checkbox.checked;
+                });
+            });
+        }
+        
+        // Configurar opciones de color seleccionables
+        function setupColorOptions() {
+            const colorOptions = document.querySelectorAll('.color-option');
+            
+            colorOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Deseleccionar todos los colores
+                    colorOptions.forEach(c => c.classList.remove('selected'));
+                    
+                    // Seleccionar el color clickeado
+                    this.classList.add('selected');
+                    
+                    // Guardar el valor del color
+                    document.getElementById('color_principal').value = this.getAttribute('data-color');
+                });
+            });
+        }
+        
+        // Navegar al siguiente paso
+        function nextStep() {
+            if (!validateStep(currentStep)) {
+                return;
+            }
+            
+            // Ocultar tarjeta actual
+            document.getElementById(`card${currentStep}`).classList.remove('active');
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            
+            // Avanzar al siguiente paso
+            currentStep++;
+            
+            // Mostrar tarjeta siguiente
+            document.getElementById(`card${currentStep}`).classList.add('active');
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            
+            // Actualizar progreso
+            for (let i = 1; i < currentStep; i++) {
+                document.getElementById(`step${i}`).classList.add('completed');
+            }
+            
+            // Actualizar botones de navegación
+            updateNavigation();
+            
+            // Si estamos en el paso 5, generar resumen
+            if (currentStep === 5) {
+                generateSummary();
+            }
+        }
+        
+        // Navegar al paso anterior
+        function prevStep() {
+            // Ocultar tarjeta actual
+            document.getElementById(`card${currentStep}`).classList.remove('active');
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            
+            // Retroceder al paso anterior
+            currentStep--;
+            
+            // Mostrar tarjeta anterior
+            document.getElementById(`card${currentStep}`).classList.add('active');
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            
+            // Actualizar progreso (quitar completado del paso actual)
+            for (let i = currentStep + 1; i <= totalSteps; i++) {
+                document.getElementById(`step${i}`).classList.remove('completed');
+            }
+            
+            // Actualizar botones de navegación
+            updateNavigation();
+        }
+        
+        // Actualizar botones de navegación
+        function updateNavigation() {
+            const btnPrev = document.getElementById('btnPrev');
+            const btnNext = document.getElementById('btnNext');
+            const btnSubmit = document.getElementById('btnSubmit');
+            
+            // Mostrar/ocultar botón "Anterior"
+            if (currentStep > 1) {
+                btnPrev.style.display = 'flex';
+            } else {
+                btnPrev.style.display = 'none';
+            }
+            
+            // Mostrar/ocultar botones "Siguiente" y "Enviar"
+            if (currentStep < totalSteps) {
+                btnNext.style.display = 'flex';
+                btnSubmit.style.display = 'none';
+            } else {
+                btnNext.style.display = 'none';
+                btnSubmit.style.display = 'flex';
+            }
+            
+            // Cambiar texto del botón "Siguiente" en el último paso antes del envío
+            if (currentStep === totalSteps - 1) {
+                btnNext.textContent = 'Revisar y Enviar';
+            } else {
+                btnNext.innerHTML = 'Siguiente <span>→</span>';
+            }
+        }
+        
+        // Validar el paso actual
+        function validateStep(step) {
+            let isValid = true;
+            
+            // Remover errores previos
+            document.querySelectorAll('.has-error').forEach(el => {
+                el.classList.remove('has-error');
+            });
+            
+            // Validar según el paso
+            switch(step) {
+                case 1:
+                    // Validar datos del cliente
+                    const nombre = document.getElementById('nombre');
+                    const email = document.getElementById('email');
+                    const rubro = document.getElementById('rubro');
+                    
+                    if (!nombre.value.trim()) {
+                        nombre.parentElement.classList.add('has-error');
+                        isValid = false;
+                    }
+                    
+                    if (!email.value.trim() || !isValidEmail(email.value)) {
+                        email.parentElement.classList.add('has-error');
+                        isValid = false;
+                    }
+                    
+                    if (!rubro.value.trim()) {
+                        rubro.parentElement.classList.add('has-error');
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 2:
+                    // Validar información de la LP
+                    const objetivoLp = document.getElementById('objetivo_lp');
+                    const productoServicio = document.getElementById('producto_servicio');
+                    const publicoObjetivo = document.getElementById('publico_objetivo');
+                    const llamadoAccion = document.getElementById('llamado_accion');
+                    
+                    if (!objetivoLp.value) {
+                        objetivoLp.parentElement.classList.add('has-error');
+                        isValid = false;
+                    }
+                    
+                    if (!productoServicio.value.trim()) {
+                        productoServicio.parentElement.classList.add('has-error');
+                        isValid = false;
+                    }
+                    
+                    if (!publicoObjetivo.value.trim()) {
+                        publicoObjetivo.parentElement.classList.add('has-error');
+                        isValid = false;
+                    }
+                    
+                    if (!llamadoAccion.value.trim()) {
+                        llamadoAccion.parentElement.classList.add('has-error');
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 3:
+                    // Validar secciones seleccionadas
+                    const seccionesSeleccionadas = document.querySelectorAll('input[name="secciones[]"]:checked');
+                    if (seccionesSeleccionadas.length < 3) {
+                        alert('Debe seleccionar al menos 3 secciones para la landing page');
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 4:
+                    // Validar diseño y estilo
+                    const estiloDiseno = document.getElementById('estilo_diseno');
+                    const identidadVisual = document.querySelector('input[name="identidad_visual"]:checked');
+                    const dominioLp = document.getElementById('dominio_lp');
+                    const hostingLp = document.getElementById('hosting_lp');
+                    const plazoLp = document.getElementById('plazo_lp');
+                    const presupuestoLp = document.getElementById('presupuesto_lp');
+                    
+                    if (!estiloDiseno.value) {
+                        estiloDiseno.parentElement.classList.add('has-error');
+                        isValid = false;
+                    }
+                    
+                    if (!identidadVisual) {
+                        document.getElementById('identidad-error').style.display = 'block';
+                        isValid = false;
+                    }
+                    
+                    if (!dominioLp.value) {
+                        dominioLp.parentElement.classList.add('has-error');
+                        isValid = false;
+                    }
+                    
+                    if (!hostingLp.value) {
+                        hostingLp.parentElement.classList.add('has-error');
+                        isValid = false;
+                    }
+                    
+                    if (!plazoLp.value) {
+                        plazoLp.parentElement.classList.add('has-error');
+                        isValid = false;
+                    }
+                    
+                    if (!presupuestoLp.value) {
+                        presupuestoLp.parentElement.classList.add('has-error');
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 5:
+                    // Validar confirmación
+                    const confirmacion = document.getElementById('confirmacion');
+                    if (!confirmacion.checked) {
+                        confirmacion.parentElement.parentElement.classList.add('has-error');
+                        isValid = false;
+                    }
+                    break;
+            }
+            
+            return isValid;
+        }
+        
+        // Validar formato de email
+        function isValidEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+        
+        // Generar resumen para el paso 5
+        function generateSummary() {
+            const resumen = document.getElementById('resumen-contenido');
+            let html = '';
+            
+            // Datos del cliente
+            html += `<p><strong>Cliente:</strong> ${document.getElementById('nombre').value}</p>`;
+            html += `<p><strong>Email:</strong> ${document.getElementById('email').value}</p>`;
+            html += `<p><strong>Teléfono:</strong> ${document.getElementById('telefono').value || 'No proporcionado'}</p>`;
+            html += `<p><strong>Empresa:</strong> ${document.getElementById('empresa').value || 'No proporcionado'}</p>`;
+            html += `<p><strong>Rubro:</strong> ${document.getElementById('rubro').value}</p>`;
+            html += `<p><strong>Sitio web actual:</strong> ${document.getElementById('sitio_web_actual').value || 'No tiene'}</p>`;
+            html += '<hr style="margin: 15px 0; border-color: #eee;">';
+            
+            // Paquete
+            html += `<p><strong>Paquete:</strong> Landing Page Express</p>`;
+            
+            // Objetivo y detalles
+            html += `<p><strong>Objetivo:</strong> ${document.getElementById('objetivo_lp').options[document.getElementById('objetivo_lp').selectedIndex].text}</p>`;
+            html += `<p><strong>Producto/Servicio:</strong> ${document.getElementById('producto_servicio').value.substring(0, 100)}${document.getElementById('producto_servicio').value.length > 100 ? '...' : ''}</p>`;
+            html += `<p><strong>Llamado a la acción:</strong> ${document.getElementById('llamado_accion').value}</p>`;
+            html += '<hr style="margin: 15px 0; border-color: #eee;">';
+            
+            // Secciones seleccionadas
+            const seccionesSeleccionadas = [];
+            document.querySelectorAll('input[name="secciones[]"]:checked').forEach(checkbox => {
+                const seccion = checkbox.value;
+                let seccionNombre = '';
+                
+                switch(seccion) {
+                    case 'hero': seccionNombre = 'Hero/Portada'; break;
+                    case 'beneficios': seccionNombre = 'Beneficios'; break;
+                    case 'caracteristicas': seccionNombre = 'Características'; break;
+                    case 'testimonios': seccionNombre = 'Testimonios'; break;
+                    case 'precios': seccionNombre = 'Precios/Planes'; break;
+                    case 'faq': seccionNombre = 'FAQ'; break;
+                    case 'cta': seccionNombre = 'Llamado a la acción'; break;
+                    case 'contacto': seccionNombre = 'Formulario contacto'; break;
+                }
+                
+                seccionesSeleccionadas.push(seccionNombre);
+            });
+            
+            html += `<p><strong>Secciones incluidas (${seccionesSeleccionadas.length}):</strong> ${seccionesSeleccionadas.join(', ')}</p>`;
+            
+            // Diseño y estilo
+            html += `<p><strong>Estilo de diseño:</strong> ${document.getElementById('estilo_diseno').options[document.getElementById('estilo_diseno').selectedIndex].text}</p>`;
+            html += `<p><strong>Color principal:</strong> ${document.getElementById('color_principal').value || 'No seleccionado'}</p>`;
+            
+            const identidadVisual = document.querySelector('input[name="identidad_visual"]:checked');
+            let identidadTexto = '';
+            if (identidadVisual) {
+                switch(identidadVisual.value) {
+                    case 'completa': identidadTexto = 'Identidad visual completa'; break;
+                    case 'parcial': identidadTexto = 'Identidad visual parcial'; break;
+                    case 'ninguna': identidadTexto = 'Necesita identidad visual'; break;
+                }
+            }
+            html += `<p><strong>Identidad visual:</strong> ${identidadTexto}</p>`;
+            html += '<hr style="margin: 15px 0; border-color: #eee;">';
+            
+            // Logística
+            html += `<p><strong>Dominio:</strong> ${document.getElementById('dominio_lp').options[document.getElementById('dominio_lp').selectedIndex].text}</p>`;
+            html += `<p><strong>Hosting:</strong> ${document.getElementById('hosting_lp').options[document.getElementById('hosting_lp').selectedIndex].text}</p>`;
+            html += `<p><strong>Plazo deseado:</strong> ${document.getElementById('plazo_lp').options[document.getElementById('plazo_lp').selectedIndex].text}</p>`;
+            
+            // Presupuesto
+            const presupuestoText = document.getElementById('presupuesto_lp').options[document.getElementById('presupuesto_lp').selectedIndex].text;
+            html += `<p><strong>Rango de presupuesto:</strong> ${presupuestoText}</p>`;
+            
+            resumen.innerHTML = html;
+        }
+        
+        // Preparar datos para la base de datos
+        function prepareDataForDatabase() {
+            // Fecha actual
+            const ahora = new Date();
+            document.getElementById('fecha_envio').value = ahora.toISOString();
+            
+            // Datos del navegador
+            document.getElementById('user_agent').value = navigator.userAgent;
+            
+            // Obtener IP
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('ip_cliente').value = data.ip;
+                })
+                .catch(() => {
+                    document.getElementById('ip_cliente').value = 'No disponible';
+                });
+            
+            // Recopilar todos los datos del formulario en un JSON
+            const formData = {};
+            const formElements = document.getElementById('rysaForm').elements;
+            
+            for (let element of formElements) {
+                if (element.name && element.type !== 'button' && element.type !== 'submit' && element.type !== 'hidden') {
+                    if (element.type === 'checkbox' || element.type === 'radio') {
+                        if (element.checked) {
+                            if (!formData[element.name]) {
+                                formData[element.name] = [];
+                            }
+                            if (Array.isArray(formData[element.name])) {
+                                formData[element.name].push(element.value);
+                            }
+                        }
+                    } else if (element.type === 'select-multiple') {
+                        formData[element.name] = Array.from(element.selectedOptions).map(option => option.value);
+                    } else {
+                        formData[element.name] = element.value;
+                    }
+                }
+            }
+            
+            // Guardar JSON en campo oculto
+            document.getElementById('datos_completos').value = JSON.stringify(formData);
+        }
+        
+        // Guardar datos del formulario en localStorage
+        function saveFormData() {
+            const formData = {};
+            
+            // Guardar todos los campos del formulario
+            const formElements = document.getElementById('rysaForm').elements;
+            
+            for (let element of formElements) {
+                if (element.name && element.type !== 'button' && element.type !== 'submit' && element.type !== 'hidden') {
+                    if (element.type === 'checkbox' || element.type === 'radio') {
+                        if (element.checked) {
+                            if (!formData[element.name]) {
+                                formData[element.name] = [];
+                            }
+                            if (Array.isArray(formData[element.name])) {
+                                formData[element.name].push(element.value);
+                            }
+                        }
+                    } else {
+                        formData[element.name] = element.value;
+                    }
+                }
+            }
+            
+            // Guardar también el paso actual
+            formData.currentStep = currentStep;
+            
+            localStorage.setItem('rysaFormData_landing', JSON.stringify(formData));
+        }
+        
+        // Cargar datos guardados del localStorage
+        function loadFormData() {
+            const savedData = localStorage.getItem('rysaFormData_landing');
+            
+            if (savedData) {
+                const formData = JSON.parse(savedData);
+                
+                // Restaurar el paso actual si existe
+                if (formData.currentStep && formData.currentStep > 1) {
+                    const confirmLoad = confirm('Tiene un formulario incompleto guardado. ¿Desea continuar desde donde dejó?');
+                    
+                    if (confirmLoad) {
+                        // Navegar directamente al paso guardado
+                        while (currentStep < formData.currentStep) {
+                            nextStep();
+                        }
+                    } else {
+                        // Limpiar datos guardados
+                        localStorage.removeItem('rysaFormData_landing');
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

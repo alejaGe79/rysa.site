@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RYSA - Briefing Creador de Contenido</title>
+    <style>
+        /* Estilos base coherentes con rysa.site */
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #f9f9f9;
+            --gray: #7f8c8d;
+            --border: #ecf0f1;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px var(--shadow);
+            overflow: hidden;
+            margin-top: 30px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #8e44ad, #9b59b6);
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .header p {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 1.1rem;
+        }
+        
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        /* Indicador de progreso */
+        .progress-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 25px 40px 10px;
+            background-color: var(--light);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .progress-step {
+            text-align: center;
+            flex: 1;
+            position: relative;
+        }
+        
+        .step-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: white;
+            border: 2px solid var(--gray);
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .step-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+            font-weight: 500;
+        }
+        
+        .progress-step.active .step-circle {
+            background-color: #9b59b6;
+            border-color: #9b59b6;
+            color: white;
+        }
+        
+        .progress-step.completed .step-circle {
+            background-color: #9b59b6;
+            border-color: #9b59b6;
+            color: white;
+        }
+        
+        .progress-step.completed .step-circle:after {
+            content: "✓";
+        }
+        
+        /* Contenedor de tarjetas */
+        .cards-container {
+            padding: 30px 40px;
+            min-height: 500px;
+        }
+        
+        /* Estilo de tarjeta */
+        .card {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .card.active {
+            display: block;
+        }
+        
+        .card-title {
+            color: var(--primary);
+            font-size: 1.6rem;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #9b59b6;
+        }
+        
+        .card-subtitle {
+            color: var(--gray);
+            font-size: 1rem;
+            margin-bottom: 20px;
+            font-weight: normal;
+        }
+        
+        /* Estilos de formulario */
+        .form-group {
+            margin-bottom: 22px;
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--primary);
+            font-size: 1rem;
+        }
+        
+        .required:after {
+            content: " *";
+            color: var(--accent);
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="url"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: border 0.3s, box-shadow 0.3s;
+        }
+        
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #9b59b6;
+            box-shadow: 0 0 0 2px rgba(155, 89, 182, 0.2);
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        /* Grupos de checkboxes y radios */
+        .checkbox-group,
+        .radio-group {
+            margin: 12px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .checkbox-group label,
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+            cursor: pointer;
+            padding: 8px 0;
+        }
+        
+        .checkbox-group input[type="checkbox"],
+        .radio-group input[type="radio"] {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        /* Navegación */
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            padding: 25px 40px;
+            border-top: 1px solid var(--border);
+            background-color: var(--light);
+        }
+        
+        .btn {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-prev {
+            background-color: white;
+            color: var(--primary);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-prev:hover {
+            background-color: #f8f9fa;
+            border-color: var(--gray);
+        }
+        
+        .btn-next {
+            background-color: #9b59b6;
+            color: white;
+        }
+        
+        .btn-next:hover {
+            background-color: #8e44ad;
+        }
+        
+        .btn-submit {
+            background-color: #27ae60;
+            color: white;
+        }
+        
+        .btn-submit:hover {
+            background-color: #219955;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* Mensaje de error/validación */
+        .error-message {
+            color: var(--accent);
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .has-error input,
+        .has-error select,
+        .has-error textarea {
+            border-color: var(--accent);
+        }
+        
+        .has-error .error-message {
+            display: block;
+        }
+        
+        /* Paquetes de servicio */
+        .package-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .package-card {
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .package-card:hover {
+            border-color: #9b59b6;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .package-card.selected {
+            border-color: #9b59b6;
+            background-color: rgba(155, 89, 182, 0.05);
+        }
+        
+        .package-name {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .package-price {
+            font-size: 1.5rem;
+            color: #9b59b6;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .package-features {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+        
+        .package-features li {
+            padding: 5px 0;
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+        }
+        
+        .package-features li:before {
+            content: "✓";
+            color: #9b59b6;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        /* Slider para cantidad de contenido */
+        .slider-container {
+            margin: 25px 0;
+        }
+        
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .slider-value {
+            font-weight: 600;
+            color: #9b59b6;
+        }
+        
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #ddd;
+            outline: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #9b59b6;
+            cursor: pointer;
+        }
+        
+        .slider::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #9b59b6;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .slider-ticks {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        /* Ejemplos de contenido */
+        .content-examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .content-example {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .content-example:hover {
+            border-color: #9b59b6;
+            transform: translateY(-3px);
+        }
+        
+        .content-example.selected {
+            border-color: #9b59b6;
+            background-color: rgba(155, 89, 182, 0.05);
+        }
+        
+        .example-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .example-name {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                margin-top: 10px;
+            }
+            
+            .header, .cards-container, .navigation {
+                padding: 20px;
+            }
+            
+            .progress-container {
+                padding: 20px 20px 10px;
+            }
+            
+            .step-label {
+                font-size: 0.8rem;
+            }
+            
+            .package-cards,
+            .content-examples {
+                grid-template-columns: 1fr;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Encabezado -->
+        <div class="header">
+            <div class="service-icon">📱</div>
+            <h1>Creador de Contenido - RYSA</h1>
+            <p>Complete el briefing para nuestro servicio de creación de contenido digital</p>
+        </div>
+        
+        <!-- Indicador de progreso -->
+        <div class="progress-container">
+            <div class="progress-step active" id="step1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Datos Cliente</div>
+            </div>
+            <div class="progress-step" id="step2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Paquete Contenido</div>
+            </div>
+            <div class="progress-step" id="step3">
+                <div class="step-circle">3</div>
+                <div class="step-label">Briefing Contenido</div>
+            </div>
+            <div class="progress-step" id="step4">
+                <div class="step-circle">4</div>
+                <div class="step-label">Estilo y Formatos</div>
+            </div>
+            <div class="progress-step" id="step5">
+                <div class="step-circle">5</div>
+                <div class="step-label">Confirmar</div>
+            </div>
+        </div>
+        
+        <!-- Contenedor de tarjetas -->
+        <form id="rysaForm" action="https://formsubmit.co/info@rysa.site" method="POST">
+            <!-- Campos ocultos para FormSubmit -->
+            <input type="hidden" name="_subject" value="CREADOR DE CONTENIDO - Nuevo Briefing">
+            <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="_next" value="https://rysa.site/gracias.html">
+            <input type="hidden" name="_captcha" value="false">
+            
+            <!-- Campos para la base de datos -->
+            <input type="hidden" name="tipo_formulario" value="creador_contenido">
+            <input type="hidden" name="fecha_envio" id="fecha_envio">
+            <input type="hidden" name="ip_cliente" id="ip_cliente">
+            <input type="hidden" name="user_agent" id="user_agent">
+            <input type="hidden" name="datos_completos" id="datos_completos">
+            
+            <div class="cards-container">
+                <!-- Tarjeta 1: Datos del Cliente -->
+                <div class="card active" id="card1">
+                    <h2 class="card-title">Información del Cliente</h2>
+                    <p class="card-subtitle">Complete sus datos de contacto para comenzar</p>
+                    
+                    <div class="form-group">
+                        <label for="nombre" class="required">Nombre completo / Razón Social</label>
+                        <input type="text" id="nombre" name="nombre" required>
+                        <div class="error-message">Por favor ingrese su nombre</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email" class="required">Correo electrónico</label>
+                        <input type="email" id="email" name="email" required>
+                        <div class="error-message">Ingrese un email válido</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="telefono">Teléfono / WhatsApp</label>
+                        <input type="tel" id="telefono" name="telefono">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="empresa">Empresa / Marca</label>
+                        <input type="text" id="empresa" name="empresa">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="rubro" class="required">Rubro / Actividad principal</label>
+                        <input type="text" id="rubro" name="rubro" placeholder="Ej: Abogacía, Gastronomía, Retail..." required>
+                        <div class="error-message">Por favor ingrese el rubro de su empresa</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="sitio_web">Sitio web actual (si tiene)</label>
+                        <input type="url" id="sitio_web" name="sitio_web" placeholder="https://">
+                    </div>
+                </div>
+                
+                <!-- Tarjeta 2: Paquetes de Creador de Contenido -->
+                <div class="card" id="card2">
+                    <h2 class="card-title">Seleccione su Paquete</h2>
+                    <p class="card-subtitle">Elija el paquete que mejor se adapte a sus necesidades de contenido</p>
+                    
+                    <div class="package-cards">
+                        <!-- Paquete Básico -->
+                        <div class="package-card" data-package="basico">
+                            <div class="package-name">Contenido Básico</div>
+                            <div class="package-price">Consultar/mes</div>
+                            <ul class="package-features">
+                                <li>8-10 piezas de contenido</li>
+                                <li>Formato: Posts + gráficos</li>
+                                <li>1 plataforma principal</li>
+                                <li>Copywriting básico</li>
+                                <li>Diseño simple</li>
+                                <li>Revisión mensual</li>
+                            </ul>
+                            <input type="radio" name="paquete_contenido" value="basico" style="display: none;" required>
+                        </div>
+                        
+                        <!-- Paquete Profesional -->
+                        <div class="package-card" data-package="profesional">
+                            <div class="package-name">Contenido Profesional</div>
+                            <div class="package-price">Consultar/mes</div>
+                            <ul class="package-features">
+                                <li>15-20 piezas de contenido</li>
+                                <li>Múltiples formatos</li>
+                                <li>2-3 plataformas</li>
+                                <li>Copywriting profesional</li>
+                                <li>Diseño personalizado</li>
+                                <li>Estrategia de contenido</li>
+                                <li>Revisión semanal</li>
+                            </ul>
+                            <input type="radio" name="paquete_contenido" value="profesional" style="display: none;">
+                        </div>
+                        
+                        <!-- Paquete Premium -->
+                        <div class="package-card" data-package="premium">
+                            <div class="package-name">Contenido Premium</div>
+                            <div class="package-price">Consultar/mes</div>
+                            <ul class="package-features">
+                                <li>25-30 piezas de contenido</li>
+                                <li>Formatos avanzados</li>
+                                <li>3+ plataformas</li>
+                                <li>Copywriting estratégico</li>
+                                <li>Diseño premium</li>
+                                <li>Estrategia integral</li>
+                                <li>Calendario editorial</li>
+                                <li>Revisión constante</li>
+                            </ul>
+                            <input type="radio" name="paquete_contenido" value="premium" style="display: none;">
+                        </div>
+                        
+                        <!-- Paquete Personalizado -->
+                        <div class="package-card" data-package="personalizado">
+                            <div class="package-name">Contenido Personalizado</div>
+                            <div class="package-price">Consultar</div>
+                            <ul class="package-features">
+                                <li>Contenido a medida</li>
+                                <li>Formatos exclusivos</li>
+                                <li>Multiplataforma</li>
+                                <li>Copywriting experto</li>
+                                <li>Diseño exclusivo</li>
+                                <li>Estrategia 360°</li>
+                                <li>Brand storytelling</li>
+                                <li>Soporte prioritario</li>
+                            </ul>
+                            <input type="radio" name="paquete_contenido" value="personalizado" style="display: none;">
+                        </div>
+                    </div>
+                    
+                    <div class="error-message" id="paquete-error" style="margin-top: 20px; display: none;">
+                        Por favor seleccione un paquete
+                    </div>
+                </div>
+                
+                <!-- Tarjeta 3: Briefing Específico de Contenido -->
+                <div class="card" id="card3">
+                    <h2 class="card-title">Briefing - Creador de Contenido</h2>
+                    <p class="card-subtitle">Complete los detalles específicos para la creación de su contenido</p>
+                    
+                    <div class="form-group">
+                        <label class="required">Plataformas de destino:</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" name="plataformas[]" value="instagram" required> Instagram</label>
+                            <label><input type="checkbox" name="plataformas[]" value="facebook"> Facebook</label>
+                            <label><input type="checkbox" name="plataformas[]" value="linkedin"> LinkedIn</label>
+                            <label><input type="checkbox" name="plataformas[]" value="tiktok"> TikTok</label>
+                            <label><input type="checkbox" name="plataformas[]" value="twitter"> Twitter/X</label>
+                            <label><input type="checkbox" name="plataformas[]" value="youtube"> YouTube</label>
+                            <label><input type="checkbox" name="plataformas[]" value="blog"> Blog/Web</label>
+                            <label><input type="checkbox" name="plataformas[]" value="newsletter"> Newsletter/Email</label>
+                        </div>
+                        <div class="error-message" id="plataformas-error" style="display: none;">Seleccione al menos una plataforma</div>
+                    </div>
+                    
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Cantidad mensual de piezas de contenido:</span>
+                            <span class="slider-value" id="cantidadValue">15</span>
+                        </div>
+                        <input type="range" min="5" max="40" value="15" class="slider" id="cantidadContenido" name="cantidad_contenido">
+                        <div class="slider-ticks">
+                            <span>5</span>
+                            <span>10</span>
+                            <span>15</span>
+                            <span>20</span>
+                            <span>25</span>
+                            <span>30</span>
+                            <span>35</span>
+                            <span>40+</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="required">Tipos de contenido principales:</label>
+                        <div class="content-examples">
+                            <div class="content-example" data-type="posts">
+                                <div class="example-icon">📝</div>
+                                <div class="example-name">Posts</div>
+                                <input type="checkbox" name="tipos_contenido[]" value="posts" style="display: none;">
+                            </div>
+                            <div class="content-example" data-type="graficos">
+                                <div class="example-icon">🎨</div>
+                                <div class="example-name">Gráficos</div>
+                                <input type="checkbox" name="tipos_contenido[]" value="graficos" style="display: none;">
+                            </div>
+                            <div class="content-example" data-type="carousels">
+                                <div class="example-icon">🖼️</div>
+                                <div class="example-name">Carrousels</div>
+                                <input type="checkbox" name="tipos_contenido[]" value="carousels" style="display: none;">
+                            </div>
+                            <div class="content-example" data-type="stories">
+                                <div class="example-icon">📱</div>
+                                <div class="example-name">Stories/Reels</div>
+                                <input type="checkbox" name="tipos_contenido[]" value="stories" style="display: none;">
+                            </div>
+                            <div class="content-example" data-type="videos">
+                                <div class="example-icon">🎥</div>
+                                <div class="example-name">Videos cortos</div>
+                                <input type="checkbox" name="tipos_contenido[]" value="videos" style="display: none;">
+                            </div>
+                            <div class="content-example" data-type="blog">
+                                <div class="example-icon">📄</div>
+                                <div class="example-name">Artículos blog</div>
+                                <input type="checkbox" name="tipos_contenido[]" value="blog" style="display: none;">
+                            </div>
+                        </div>
+                        <div class="error-message" id="tipos-error" style="display: none;">Seleccione al menos un tipo de contenido</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="frecuencia_contenido" class="required">Frecuencia de entrega:</label>
+                        <select id="frecuencia_contenido" name="frecuencia_contenido" required>
+                            <option value="">Seleccione frecuencia</option>
+                            <option value="diaria">Diaria (contenido diario)</option>
+                            <option value="3-4semana">3-4 veces por semana</option>
+                            <option value="semanal">Semanal (lotes semanales)</option>
+                            <option value="quincenal">Quincenal (lotes cada 15 días)</option>
+                            <option value="mensual">Mensual (lote completo)</option>
+                        </select>
+                        <div class="error-message">Seleccione una frecuencia</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="objetivo_contenido" class="required">Objetivo principal del contenido:</label>
+                        <select id="objetivo_contenido" name="objetivo_contenido" required>
+                            <option value="">Seleccione objetivo</option>
+                            <option value="engagement">Aumentar engagement</option>
+                            <option value="ventas">Generar ventas/leads</option>
+                            <option value="educacion">Educar/informar</option>
+                            <option value="marca">Posicionar marca</option>
+                            <option value="comunidad">Construir comunidad</option>
+                            <option value="trafico">Generar tráfico web</option>
+                        </select>
+                        <div class="error-message">Seleccione un objetivo</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="publico_objetivo">Público objetivo (target):</label>
+                        <textarea id="publico_objetivo" name="publico_objetivo" placeholder="Describa su público objetivo: edad, intereses, profesión, ubicación..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="temas_contenido" class="required">Temas principales para el contenido:</label>
+                        <textarea id="temas_contenido" name="temas_contenido" placeholder="Liste los temas principales sobre los que quiere crear contenido (mínimo 3 temas)..." required></textarea>
+                        <div class="error-message">Ingrese los temas principales para el contenido</div>
+                    </div>
+                </div>
+                
+                <!-- Tarjeta 4: Estilo y Formatos -->
+                <div class="card" id="card4">
+                    <h2 class="card-title">Estilo y Formatos</h2>
+                    <p class="card-subtitle">Defina el estilo visual y los lineamientos creativos</p>
+                    
+                    <div class="form-group">
+                        <label for="estilo_visual" class="required">Estilo visual preferido:</label>
+                        <select id="estilo_visual" name="estilo_visual" required>
+                            <option value="">Seleccione estilo</option>
+                            <option value="minimalista">Minimalista y limpio</option>
+                            <option value="moderno">Moderno y atrevido</option>
+                            <option value="colorido">Colorido y vibrante</option>
+                            <option value="elegante">Elegante y sofisticado</option>
+                            <option value="corporativo">Corporativo/profesional</option>
+                            <option value="creativo">Creativo y único</option>
+                            <option value="retro">Retro/vintage</option>
+                        </select>
+                        <div class="error-message">Seleccione un estilo visual</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="tono_contenido" class="required">Tono de comunicación:</label>
+                        <select id="tono_contenido" name="tono_contenido" required>
+                            <option value="">Seleccione tono</option>
+                            <option value="formal">Formal/profesional</option>
+                            <option value="coloquial">Coloquial/amigable</option>
+                            <option value="inspirador">Inspirador/motivacional</option>
+                            <option value="humoristico">Humorístico/desenfadado</option>
+                            <option value="experto">Experto/autoridad</option>
+                            <option value="cercano">Cercano/empático</option>
+                            <option value="innovador">Innovador/vanguardista</option>
+                        </select>
+                        <div class="error-message">Seleccione un tono de comunicación</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>¿Tiene identidad visual definida?</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="identidad_visual" value="completa" required> Sí, completa (logo, colores, tipografía)</label>
+                            <label><input type="radio" name="identidad_visual" value="parcial"> Sí, parcial (algunos elementos)</label>
+                            <label><input type="radio" name="identidad_visual" value="ninguna"> No, necesito asesoría</label>
+                        </div>
+                        <div class="error-message" id="identidad-error" style="display: none;">Seleccione una opción</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="colores">Colores de marca (si aplica):</label>
+                        <input type="text" id="colores" name="colores" placeholder="Ej: Azul #3498db, Blanco #ffffff, Gris #7f8c8d">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="referencias_estilo">Referencias visuales (links o descripción):</label>
+                        <textarea id="referencias_estilo" name="referencias_estilo" placeholder="Links a Pinterest, Instagram, sitios web, o descripción de estilos que le gustan..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="material_proporcionado">Material que puede proporcionar:</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" name="material[]" value="fotos"> Fotos/imágenes</label>
+                            <label><input type="checkbox" name="material[]" value="logos"> Logos/identidad</label>
+                            <label><input type="checkbox" name="material[]" value="videos"> Videos/crudos</label>
+                            <label><input type="checkbox" name="material[]" value="textos"> Textos/información</label>
+                            <label><input type="checkbox" name="material[]" value="ninguno"> Ninguno, necesito todo</label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="restricciones_creativas">Restricciones creativas o lineamientos:</label>
+                        <textarea id="restricciones_creativas" name="restricciones_creativas" placeholder="Elementos a evitar, palabras no permitidas, políticas de marca..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="inicio_contenido" class="required">¿Cuándo desea comenzar?</label>
+                        <select id="inicio_contenido" name="inicio_contenido" required>
+                            <option value="">Seleccione fecha de inicio</option>
+                            <option value="urgente">Lo antes posible (1 semana)</option>
+                            <option value="2semanas">En 2 semanas</option>
+                            <option value="1mes">En 1 mes</option>
+                            <option value="flexible">Flexible (coordinar fecha)</option>
+                        </select>
+                        <div class="error-message">Seleccione cuándo desea comenzar</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="presupuesto_contenido">Presupuesto mensual $ Argentinos:</label>
+                        <select id="presupuesto_contenido" name="presupuesto_contenido">
+                            <option value="">Seleccione presupuesto</option>
+                            <option value="-100">Menos de $100.000</option>
+                            <option value="100-200">$100.000 - $200.000</option>
+                            <option value="200-500">$200.000 - $500.00</option>
+                            <option value="500-1000">$500.000 - $1.000.000</option>
+                            <option value="1000+">Más de $1.000.000</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Tarjeta 5: Confirmación -->
+                <div class="card" id="card5">
+                    <h2 class="card-title">Confirmación y Envío</h2>
+                    <p class="card-subtitle">Revise la información antes de enviar su briefing</p>
+                    
+                    <div id="resumen" style="background-color: #f8fafc; padding: 25px; border-radius: 8px; margin-bottom: 30px;">
+                        <h3 style="color: var(--primary); margin-bottom: 15px;">Resumen del Briefing - Creador de Contenido</h3>
+                        <div id="resumen-contenido">
+                            <!-- El resumen se generará automáticamente con JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <label>
+                                <input type="checkbox" id="confirmacion" name="confirmacion" required>
+                                Confirmo que la información proporcionada es correcta y autorizo el contacto por parte de RYSA para coordinar el servicio de creación de contenido.
+                            </label>
+                        </div>
+                        <div class="error-message">Debe confirmar para enviar el formulario</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="comentarios_finales">Comentarios finales o preguntas:</label>
+                        <textarea id="comentarios_finales" name="comentarios_finales" placeholder="¿Algo más que debamos saber sobre su proyecto de contenido?"></textarea>
+                    </div>
+                    
+                    <div class="note" style="font-size: 14px; color: var(--gray); margin-top: 20px; padding: 15px; background-color: #fff9e6; border-radius: 6px; border-left: 4px solid #f1c40f;">
+                        <p><strong>Proceso post-envío:</strong></p>
+                        <ul style="margin-top: 10px; padding-left: 20px;">
+                            <li>Recibirá un email de confirmación en 24 horas</li>
+                            <li>Nos pondremos en contacto para coordinar una reunión creativa</li>
+                            <li>Recibirá muestras de estilo y propuesta formal</li>
+                            <li>Inicio del servicio una vez aprobada la propuesta</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Navegación -->
+            <div class="navigation">
+                <button type="button" class="btn btn-prev" id="btnPrev" style="display: none;">
+                    <span>←</span> Anterior
+                </button>
+                
+                <button type="button" class="btn btn-next" id="btnNext">
+                    Siguiente <span>→</span>
+                </button>
+                
+                <button type="submit" class="btn btn-submit" id="btnSubmit" style="display: none;">
+                    Enviar Briefing Contenido
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Variables globales
+        let currentStep = 1;
+        const totalSteps = 5;
+        
+        // Inicializar el formulario
+        document.addEventListener('DOMContentLoaded', function() {
+            // Configurar tarjetas de paquetes
+            setupPackageCards();
+            
+            // Configurar ejemplos de contenido
+            setupContentExamples();
+            
+            // Configurar slider
+            setupSlider();
+            
+            // Configurar botones de navegación
+            document.getElementById('btnNext').addEventListener('click', nextStep);
+            document.getElementById('btnPrev').addEventListener('click', prevStep);
+            
+            // Configurar envío del formulario
+            document.getElementById('rysaForm').addEventListener('submit', function(e) {
+                if (!validateStep(currentStep)) {
+                    e.preventDefault();
+                    return;
+                }
+                
+                // Preparar datos para la base de datos
+                prepareDataForDatabase();
+                
+                // Actualizar asunto del email con el nombre del cliente
+                const nombre = document.getElementById('nombre').value;
+                if (nombre) {
+                    document.querySelector('input[name="_subject"]').value = `CREADOR DE CONTENIDO - ${nombre}`;
+                }
+            });
+            
+            // Guardar datos en localStorage periódicamente
+            setInterval(saveFormData, 3000);
+            
+            // Cargar datos guardados si existen
+            loadFormData();
+        });
+        
+        // Configurar tarjetas de paquetes seleccionables
+        function setupPackageCards() {
+            const packageCards = document.querySelectorAll('.package-card');
+            
+            packageCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // Deseleccionar todas las tarjetas
+                    packageCards.forEach(c => c.classList.remove('selected'));
+                    
+                    // Seleccionar la tarjeta clickeada
+                    this.classList.add('selected');
+                    
+                    // Marcar el radio button correspondiente
+                    const radio = this.querySelector('input[type="radio"]');
+                    radio.checked = true;
+                    
+                    // Ocultar mensaje de error si existe
+                    document.getElementById('paquete-error').style.display = 'none';
+                });
+            });
+        }
+        
+        // Configurar ejemplos de contenido seleccionables
+        function setupContentExamples() {
+            const contentExamples = document.querySelectorAll('.content-example');
+            
+            contentExamples.forEach(example => {
+                example.addEventListener('click', function() {
+                    // Toggle selección
+                    this.classList.toggle('selected');
+                    
+                    // Marcar/desmarcar el checkbox correspondiente
+                    const checkbox = this.querySelector('input[type="checkbox"]');
+                    checkbox.checked = !checkbox.checked;
+                    
+                    // Ocultar mensaje de error si existe
+                    document.getElementById('tipos-error').style.display = 'none';
+                });
+            });
+        }
+        
+        // Configurar slider de cantidad de contenido
+        function setupSlider() {
+            const slider = document.getElementById('cantidadContenido');
+            const valueDisplay = document.getElementById('cantidadValue');
+            
+            slider.addEventListener('input', function() {
+                valueDisplay.textContent = this.value;
+            });
+        }
+        
+        // Navegar al siguiente paso
+        function nextStep() {
+            if (!validateStep(currentStep)) {
+                return;
+            }
+            
+            // Ocultar tarjeta actual
+            document.getElementById(`card${currentStep}`).classList.remove('active');
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            
+            // Avanzar al siguiente paso
+            currentStep++;
+            
+            // Mostrar tarjeta siguiente
+            document.getElementById(`card${currentStep}`).classList.add('active');
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            
+            // Actualizar progreso
+            for (let i = 1; i < currentStep; i++) {
+                document.getElementById(`step${i}`).classList.add('completed');
+            }
+            
+            // Actualizar botones de navegación
+            updateNavigation();
+            
+            // Si estamos en el paso 5, generar resumen
+            if (currentStep === 5) {
+                generateSummary();
+            }
+        }
+        
+        // Navegar al paso anterior
+        function prevStep() {
+            // Ocultar tarjeta actual
+            document.getElementById(`card${currentStep}`).classList.remove('active');
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            
+            // Retroceder al paso anterior
+            currentStep--;
+            
+            // Mostrar tarjeta anterior
+            document.getElementById(`card${currentStep}`).classList.add('active');
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            
+            // Actualizar progreso (quitar completado del paso actual)
+            for (let i = currentStep + 1; i <= totalSteps; i++) {
+                document.getElementById(`step${i}`).classList.remove('completed');
+            }
+            
+            // Actualizar botones de navegación
+            updateNavigation();
+        }
+        
+        // Actualizar botones de navegación
+        function updateNavigation() {
+            const btnPrev = document.getElementById('btnPrev');
+            const btnNext = document.getElementById('btnNext');
+            const btnSubmit = document.getElementById('btnSubmit');
+            
+            // Mostrar/ocultar botón "Anterior"
+            if (currentStep > 1) {
+                btnPrev.style.display = 'flex';
+            } else {
+                btnPrev.style.display = 'none';
+            }
+            
+            // Mostrar/ocultar botones "Siguiente" y "Enviar"
+            if (currentStep < totalSteps) {
+                btnNext.style.display = 'flex';
+                btnSubmit.style.display = 'none';
+            } else {
+                btnNext.style.display = 'none';
+                btnSubmit.style.display = 'flex';
+            }
+            
+            // Cambiar texto del botón "Siguiente" en el último paso antes del envío
+            if (currentStep === totalSteps - 1) {
+                btnNext.textContent = 'Revisar y Enviar';
+            } else {
+                btnNext.innerHTML = 'Siguiente <span>→</span>';
+            }
+        }
+        
+        // Validar el paso actual
+        function validateStep(step) {
+            let isValid = true;
+            
+            // Remover errores previos
+            document.querySelectorAll('.has-error').forEach(el => {
+                el.classList.remove('has-error');
+            });
+            
+            // Validar según el paso
+            switch(step) {
+                case 1:
+                    // Validar datos del cliente
+                    const nombre = document.getElementById('nombre');
+                    const email = document.getElementById('email');
+                    const rubro = document.getElementById('rubro');
+                    
+                    if (!nombre.value.trim()) {
+                        nombre.parentElement.classList.add('has-error');
+                        isValid = false;
+                    }
+                    
+                    if (!email.value.trim() || !isValidEmail(email.value)) {
+                        email.parentElement.classList.add('has-error');
+                        isValid = false;
+                    }
+                    
+                    if (!rubro.value.trim()) {
+                        rubro.parentElement.classList.add('has-error');
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 2:
+                    // Validar selección de paquete
+                    const paqueteSeleccionado = document.querySelector('input[name="paquete_contenido"]:checked');
+                    
+                    if (!paqueteSeleccionado) {
+                        document.getElementById('paquete-error').style.display = 'block';
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 3:
+                    // Validar briefing específico
+                    const plataformas = document.querySelectorAll('input[name="plataformas[]"]:checked');
+                    const tiposContenido = document.querySelectorAll('input[name="tipos_contenido[]"]:checked');
+                    const frecuencia = document.getElementById('frecuencia_contenido');
+                    const objetivo = document.getElementById('objetivo_contenido');
+                    const temas = document.getElementById('temas_contenido');
+                    
+                    if (plataformas.length === 0) {
+                        document.getElementById('plataformas-error').style.display = 'block';
+                        isValid = false;
+                    }
+                    
+                    if (tiposContenido.length === 0) {
+                        document.getElementById('tipos-error').style.display = 'block';
+                        isValid = false;
+                    }
+                    
+                    if (!frecuencia.value) {
+                        frecuencia.parentElement.classList.add('has-error');
+                        isValid = false;
+                    }
+                    
+                    if (!objetivo.value) {
+                        objetivo.parentElement.classList.add('has-error');
+                        isValid = false;
+                    }
+                    
+                    if (!temas.value.trim()) {
+                        temas.parentElement.classList.add('has-error');
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 4:
+                    // Validar estilo y formatos
+                    const estiloVisual = document.getElementById('estilo_visual');
+                    const tonoContenido = document.getElementById('tono_contenido');
+                    const identidadVisual = document.querySelector('input[name="identidad_visual"]:checked');
+                    const inicioContenido = document.getElementById('inicio_contenido');
+                    
+                    if (!estiloVisual.value) {
+                        estiloVisual.parentElement.classList.add('has-error');
+                        isValid = false;
+                    }
+                    
+                    if (!tonoContenido.value) {
+                        tonoContenido.parentElement.classList.add('has-error');
+                        isValid = false;
+                    }
+                    
+                    if (!identidadVisual) {
+                        document.getElementById('identidad-error').style.display = 'block';
+                        isValid = false;
+                    }
+                    
+                    if (!inicioContenido.value) {
+                        inicioContenido.parentElement.classList.add('has-error');
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 5:
+                    // Validar confirmación
+                    const confirmacion = document.getElementById('confirmacion');
+                    if (!confirmacion.checked) {
+                        confirmacion.parentElement.parentElement.classList.add('has-error');
+                        isValid = false;
+                    }
+                    break;
+            }
+            
+            return isValid;
+        }
+        
+        // Validar formato de email
+        function isValidEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+        
+        // Generar resumen para el paso 5
+        function generateSummary() {
+            const resumen = document.getElementById('resumen-contenido');
+            let html = '';
+            
+            // Datos del cliente
+            html += `<p><strong>Cliente:</strong> ${document.getElementById('nombre').value}</p>`;
+            html += `<p><strong>Email:</strong> ${document.getElementById('email').value}</p>`;
+            html += `<p><strong>Teléfono:</strong> ${document.getElementById('telefono').value || 'No proporcionado'}</p>`;
+            html += `<p><strong>Empresa:</strong> ${document.getElementById('empresa').value || 'No proporcionado'}</p>`;
+            html += `<p><strong>Rubro:</strong> ${document.getElementById('rubro').value}</p>`;
+            html += `<p><strong>Sitio web:</strong> ${document.getElementById('sitio_web').value || 'No tiene'}</p>`;
+            html += '<hr style="margin: 15px 0; border-color: #eee;">';
+            
+            // Paquete seleccionado
+            const paqueteSeleccionado = document.querySelector('input[name="paquete_contenido"]:checked');
+            let paqueteNombre = '';
+            if (paqueteSeleccionado) {
+                switch(paqueteSeleccionado.value) {
+                    case 'basico': paqueteNombre = 'Contenido Básico ($600 USD/mes)'; break;
+                    case 'profesional': paqueteNombre = 'Contenido Profesional ($1,000 USD/mes)'; break;
+                    case 'premium': paqueteNombre = 'Contenido Premium ($1,800 USD/mes)'; break;
+                    case 'personalizado': paqueteNombre = 'Contenido Personalizado (Consultar)'; break;
+                }
+            }
+            html += `<p><strong>Paquete seleccionado:</strong> ${paqueteNombre}</p>`;
+            
+            // Plataformas seleccionadas
+            const plataformasSeleccionadas = [];
+            document.querySelectorAll('input[name="plataformas[]"]:checked').forEach(checkbox => {
+                const plataforma = checkbox.value;
+                let plataformaNombre = '';
+                
+                switch(plataforma) {
+                    case 'instagram': plataformaNombre = 'Instagram'; break;
+                    case 'facebook': plataformaNombre = 'Facebook'; break;
+                    case 'linkedin': plataformaNombre = 'LinkedIn'; break;
+                    case 'tiktok': plataformaNombre = 'TikTok'; break;
+                    case 'twitter': plataformaNombre = 'Twitter/X'; break;
+                    case 'youtube': plataformaNombre = 'YouTube'; break;
+                    case 'blog': plataformaNombre = 'Blog/Web'; break;
+                    case 'newsletter': plataformaNombre = 'Newsletter/Email'; break;
+                }
+                
+                plataformasSeleccionadas.push(plataformaNombre);
+            });
+            
+            html += `<p><strong>Plataformas:</strong> ${plataformasSeleccionadas.join(', ')}</p>`;
+            
+            // Cantidad de contenido
+            html += `<p><strong>Cantidad mensual:</strong> ${document.getElementById('cantidadContenido').value} piezas</p>`;
+            
+            // Tipos de contenido seleccionados
+            const tiposSeleccionados = [];
+            document.querySelectorAll('input[name="tipos_contenido[]"]:checked').forEach(checkbox => {
+                const tipo = checkbox.value;
+                let tipoNombre = '';
+                
+                switch(tipo) {
+                    case 'posts': tipoNombre = 'Posts'; break;
+                    case 'graficos': tipoNombre = 'Gráficos'; break;
+                    case 'carousels': tipoNombre = 'Carrousels'; break;
+                    case 'stories': tipoNombre = 'Stories/Reels'; break;
+                    case 'videos': tipoNombre = 'Videos cortos'; break;
+                    case 'blog': tipoNombre = 'Artículos blog'; break;
+                }
+                
+                tiposSeleccionados.push(tipoNombre);
+            });
+            
+            html += `<p><strong>Tipos de contenido:</strong> ${tiposSeleccionados.join(', ')}</p>`;
+            html += '<hr style="margin: 15px 0; border-color: #eee;">';
+            
+            // Detalles del contenido
+            html += `<p><strong>Frecuencia de entrega:</strong> ${document.getElementById('frecuencia_contenido').options[document.getElementById('frecuencia_contenido').selectedIndex].text}</p>`;
+            html += `<p><strong>Objetivo:</strong> ${document.getElementById('objetivo_contenido').options[document.getElementById('objetivo_contenido').selectedIndex].text}</p>`;
+            html += `<p><strong>Estilo visual:</strong> ${document.getElementById('estilo_visual').options[document.getElementById('estilo_visual').selectedIndex].text}</p>`;
+            html += `<p><strong>Tono de comunicación:</strong> ${document.getElementById('tono_contenido').options[document.getElementById('tono_contenido').selectedIndex].text}</p>`;
+            html += '<hr style="margin: 15px 0; border-color: #eee;">';
+            
+            // Plazos y presupuesto
+            html += `<p><strong>Inicio:</strong> ${document.getElementById('inicio_contenido').options[document.getElementById('inicio_contenido').selectedIndex].text}</p>`;
+            html += `<p><strong>Presupuesto mensual:</strong> ${document.getElementById('presupuesto_contenido').value ? document.getElementById('presupuesto_contenido').options[document.getElementById('presupuesto_contenido').selectedIndex].text : 'No especificado'}</p>`;
+            
+            resumen.innerHTML = html;
+        }
+        
+        // Preparar datos para la base de datos
+        function prepareDataForDatabase() {
+            // Fecha actual
+            const ahora = new Date();
+            document.getElementById('fecha_envio').value = ahora.toISOString();
+            
+            // Datos del navegador
+            document.getElementById('user_agent').value = navigator.userAgent;
+            
+            // Obtener IP
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('ip_cliente').value = data.ip;
+                })
+                .catch(() => {
+                    document.getElementById('ip_cliente').value = 'No disponible';
+                });
+            
+            // Recopilar todos los datos del formulario en un JSON
+            const formData = {};
+            const formElements = document.getElementById('rysaForm').elements;
+            
+            for (let element of formElements) {
+                if (element.name && element.type !== 'button' && element.type !== 'submit' && element.type !== 'hidden') {
+                    if (element.type === 'checkbox' || element.type === 'radio') {
+                        if (element.checked) {
+                            if (!formData[element.name]) {
+                                formData[element.name] = [];
+                            }
+                            if (Array.isArray(formData[element.name])) {
+                                formData[element.name].push(element.value);
+                            }
+                        }
+                    } else if (element.type === 'select-multiple') {
+                        formData[element.name] = Array.from(element.selectedOptions).map(option => option.value);
+                    } else {
+                        formData[element.name] = element.value;
+                    }
+                }
+            }
+            
+            // Guardar JSON en campo oculto
+            document.getElementById('datos_completos').value = JSON.stringify(formData);
+        }
+        
+        // Guardar datos del formulario en localStorage
+        function saveFormData() {
+            const formData = {};
+            
+            // Guardar todos los campos del formulario
+            const formElements = document.getElementById('rysaForm').elements;
+            
+            for (let element of formElements) {
+                if (element.name && element.type !== 'button' && element.type !== 'submit' && element.type !== 'hidden') {
+                    if (element.type === 'checkbox' || element.type === 'radio') {
+                        if (element.checked) {
+                            if (!formData[element.name]) {
+                                formData[element.name] = [];
+                            }
+                            if (Array.isArray(formData[element.name])) {
+                                formData[element.name].push(element.value);
+                            }
+                        }
+                    } else {
+                        formData[element.name] = element.value;
+                    }
+                }
+            }
+            
+            // Guardar también el paso actual
+            formData.currentStep = currentStep;
+            
+            localStorage.setItem('rysaFormData_contenido', JSON.stringify(formData));
+        }
+        
+        // Cargar datos guardados del localStorage
+        function loadFormData() {
+            const savedData = localStorage.getItem('rysaFormData_contenido');
+            
+            if (savedData) {
+                const formData = JSON.parse(savedData);
+                
+                // Restaurar el paso actual si existe
+                if (formData.currentStep && formData.currentStep > 1) {
+                    const confirmLoad = confirm('Tiene un formulario incompleto guardado. ¿Desea continuar desde donde dejó?');
+                    
+                    if (confirmLoad) {
+                        // Navegar directamente al paso guardado
+                        while (currentStep < formData.currentStep) {
+                            nextStep();
+                        }
+                    } else {
+                        // Limpiar datos guardados
+                        localStorage.removeItem('rysaFormData_contenido');
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
